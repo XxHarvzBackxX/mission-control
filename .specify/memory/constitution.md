@@ -1,10 +1,10 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: (none) → 1.0.0
-Modified principles: N/A (initial ratification)
+Version change: 1.0.0 → 1.1.0
+Modified principles: IX. Purposeful Documentation (added)
 Added sections:
-  - Core Principles (I–VIII)
+  - Core Principles (I–IX)
   - Technology Stack
   - Development Standards
   - Governance
@@ -83,6 +83,13 @@ first-party implementation exists, or the dependency provides substantial, well-
 value. Every new dependency MUST be justified in the relevant design document. Dependencies
 that are added for convenience (e.g., single-function utilities, thin wrappers) are prohibited.
 
+### IX. Purposeful Documentation
+
+Public APIs and non-obvious business logic SHOULD use concise XML documentation comments
+where appropriate. Documentation MUST improve readability without becoming excessively verbose
+or duplicating implementation details. Comments that merely restate the code (e.g.,
+`/// Gets the name`) are prohibited — if a name is self-explanatory, no comment is required.
+
 ## Technology Stack
 
 | Layer    | Technology              | Constraint                                           |
@@ -96,7 +103,7 @@ or replacing a listed technology requires a constitution amendment.
 
 ## Development Standards
 
-- All pull requests MUST be reviewed against Principles I–VIII before merge.
+- All pull requests MUST be reviewed against Principles I–IX before merge.
 - A PR introducing business logic outside the domain layer MUST be rejected.
 - A PR introducing a new dependency without documented justification MUST be rejected.
 - Unit tests for new or modified mission calculation logic are a merge prerequisite, not
@@ -119,4 +126,4 @@ changes to all dependent templates under `.specify/templates/`.
 pull-request review. Exceptions require explicit, documented justification recorded in the
 Complexity Tracking section of the relevant `plan.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-05-12 | **Last Amended**: 2026-05-12
+**Version**: 1.1.0 | **Ratified**: 2026-05-12 | **Last Amended**: 2026-05-12
