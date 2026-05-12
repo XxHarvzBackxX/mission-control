@@ -20,6 +20,14 @@
 - Q: Can users edit or delete an existing mission after saving? → A: Yes — users can update any field or remove a mission entirely.
 - Q: Should the low-margin warning fire independently on "Not Ready" missions, or only on "At Risk"? → A: Independent — both warnings can appear simultaneously. Warnings are displayed as small red indicator boxes attached to the mission.
 
+### Session 2026-05-12 (Amendment)
+
+- Stated: Backend unit testing framework changed from xUnit to NUnit.
+- Stated: Mission MUST support an array of crew member names (strings). Crew management (add/remove crew, see mission assignments) is deferred to a future feature; crew members are strings for now.
+- Stated: Mission MUST support a Start Mission Time and End Mission Time, recorded in Kerbin Time. Crew member required/optional status, mission time optional/required rules, and readiness impact of new fields are subject to clarification.
+- Q: Are Start Mission Time and End Mission Time required or optional? → A: Optional, no readiness impact. If End MT is set but Start MT is not, a non-blocking advisory warning fires. Mission can be saved in either case.
+- Q: Should crew members and probe core be visible in the mission list and summary, or only in the edit form? → A: Shown in both — abbreviated in the mission list, full detail in the mission summary.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Create and Evaluate a Mission (Priority: P1)
@@ -93,6 +101,8 @@ A mission planner updates the parameters of an existing mission (e.g., correctin
 - What happens when delta-v values are entered as negative numbers? → Treated as invalid input; a warning is generated identifying the missing or invalid information.
 - What happens when no missions have been created yet? → The mission list displays an empty state message.
 - What happens when a user edits a mission name to match an existing mission? → The system rejects the change with a validation error; the original name is preserved.
+- What happens when End Mission Time is set but Start Mission Time is not? → The mission saves successfully but displays a non-blocking advisory warning about the missing start time.
+- What happens when End Mission Time is earlier than Start Mission Time? → Treated as invalid input; a validation warning is shown and the mission cannot be saved with that time combination.
 
 ## Non-Functional Requirements
 
@@ -105,26 +115,34 @@ A mission planner updates the parameters of an existing mission (e.g., correctin
 
 ### Functional Requirements
 
-- **FR-001**: System MUST allow users to create a mission with the following fields: name, target body, mission type, available delta-v, and required delta-v. Target body and mission type MUST be selectable from a predefined list of KSP-specific options and MUST also allow a free-text "Other" value to support modded content.
+- **FR-001**: System MUST allow users to create a mission with the following fields: name, target body, mission type, available delta-v, required delta-v, mission control mode (Crewed or Probe), crew members (array of strings — shown when mode is Crewed), probe core (predefined KSP list + Other — shown when mode is Probe), start Mission Time (Kerbin Time, optional), and end Mission Time (Kerbin Time, optional). Target body, mission type, and probe core MUST be selectable from predefined KSP-specific lists and MUST also allow a free-text “Other” value.
 - **FR-002**: System MUST evaluate mission readiness as "Ready" when the available delta-v exceeds the required delta-v by a reserve margin of 10% or more.
 - **FR-003**: System MUST evaluate mission readiness as "At Risk" when the available delta-v meets or exceeds the required delta-v but the reserve margin is less than 10%.
 - **FR-004**: System MUST evaluate mission readiness as "Not Ready" when the available delta-v is less than the required delta-v.
 - **FR-005**: System MUST generate a warning when the available delta-v is lower than the required delta-v. This warning MUST appear regardless of whether a low-margin warning is also active.
 - **FR-006**: System MUST generate a warning when the reserve delta-v margin falls below 10%. This warning MUST appear regardless of readiness state — including on "Not Ready" missions — and independently of FR-005.
-- **FR-007**: System MUST generate a warning when any required mission field (name, target body, mission type, available delta-v, required delta-v) is missing or invalid.
+- **FR-007**: System MUST generate a warning when any required mission field (name, target body, mission type, available delta-v, required delta-v, mission control mode) is missing or invalid.
 - **FR-008**: System MUST prevent a mission from being saved when any required field is missing or invalid.
-- **FR-009**: System MUST display a mission summary showing: mission name, target body, mission type, available delta-v, required delta-v, readiness state, and any active warnings.
-- **FR-010**: System MUST display a list of all saved missions, showing each mission's name and current readiness state.
+- **FR-009**: System MUST display a mission summary showing: mission name, target body, mission type, available delta-v, required delta-v, reserve margin %, readiness state, mission control mode, crew members (full list — Crewed mode) or probe core (Probe mode), start Mission Time, end Mission Time, and any active warnings.
+- **FR-010**: System MUST display a list of all saved missions. Each list item MUST show: mission name, readiness state, mission control mode, abbreviated crew (first crew member name + count if more than one, e.g., “Jebediah +2”) or probe core name, and any active warning indicators.
 - **FR-011**: System MUST reject a mission name that duplicates an existing mission name and display a validation error identifying the conflict.
 - **FR-012**: System MUST allow users to edit any field of a saved mission. Readiness state and warnings MUST be re-evaluated immediately upon saving the edit.
 - **FR-013**: System MUST allow users to delete a saved mission. The deleted mission MUST be removed from the mission list immediately.
 - **FR-014**: Active warnings MUST be displayed as visually distinct red indicator boxes attached to the mission in both the mission list and mission summary views.
+- **FR-015**: System MUST allow users to add and remove crew member names (strings) from a mission’s crew list. The crew list field MUST only be shown when mission control mode is “Crewed”. Crew members are stored as plain strings; full crew management is out of scope.
+- **FR-016**: System MUST allow users to record a Start Mission Time and End Mission Time for a mission, expressed in Kerbin Time. Both fields are optional and do not affect readiness state. If End Mission Time is set but Start Mission Time is not, the system MUST display a non-blocking advisory warning (the mission can still be saved).
+- **FR-017**: System MUST allow users to select a mission control mode of “Crewed” or “Probe”. Mission control mode is a required field.
+- **FR-018**: When mission control mode is “Crewed” and no crew members are specified, the system MUST evaluate readiness as “Not Ready” and generate a “MissingCrew” warning. The crew list must contain at least one entry for the mission to be ready.
+- **FR-019**: When mission control mode is “Probe”, the system MUST require a probe core selection from a predefined KSP list (Stayputnik, OKTO, HECS, QBE, OKTO2, HECS2, RoveMate, RC-001S, RC-L01, MK2 Drone Core) or an “Other” free-text entry. The probe core field MUST only be shown when mode is “Probe”.
 
 ### Key Entities
 
-- **Mission**: Represents a planned space mission. Key attributes: name (text), target body (predefined KSP option or free-text "Other"), mission type (predefined KSP option or free-text "Other"), available delta-v (numeric, m/s), required delta-v (numeric, m/s), readiness state, warnings.
+- **Mission**: Represents a planned space mission. Key attributes: name (text), target body (predefined KSP option or free-text “Other”), mission type (predefined KSP option or free-text “Other”), available delta-v (numeric, m/s), required delta-v (numeric, m/s), mission control mode (Crewed | Probe), crew members (array of strings — Crewed mode only), probe core (predefined KSP option or free-text “Other” — Probe mode only), start Mission Time (Kerbin Time — optional, subject to clarification), end Mission Time (Kerbin Time — optional, subject to clarification), readiness state, warnings.
 - **Readiness State**: A derived classification of a mission's viability — one of: Ready, At Risk, Not Ready. Calculated from the relationship between available and required delta-v.
-- **Warning**: A message associated with a mission that identifies a constraint violation (insufficient delta-v, low reserve margin) or missing required information. Multiple warnings can be active simultaneously on a single mission. Warnings are rendered as red indicator boxes attached to the mission in the UI.
+- **Warning**: A message associated with a mission that identifies a constraint violation (insufficient delta-v, low reserve margin, missing crew) or an advisory condition (end time set without start time). Multiple warnings can be active simultaneously on a single mission. Blocking warnings prevent saving; advisory warnings are non-blocking. Warnings are rendered as red indicator boxes attached to the mission in the UI.
+- **Crew Member**: A string name representing a kerbal assigned to a crewed mission. Crew members are plain strings in this feature; they will become references to a `Crew` entity in a future crew management feature.
+- **Probe Core**: The flight computer selected for an uncrewed mission. Represented as a predefined KSP value (e.g., OKTO, HECS, QBE) or a free-text “Other” value for modded probe cores.
+- **Kerbin Mission Time**: A point in KSP in-game time, stored internally as total Kerbin seconds (64-bit integer) and displayed in the format `Yy, Dd, Hh, Mm, Ss` (e.g., `1y, 42d, 3h, 15m, 0s`). Kerbin time conventions: 1 day = 6 hours = 21,600 seconds; 1 year = 426 days = 9,201,600 seconds.
 
 ## Success Criteria *(mandatory)*
 
@@ -146,5 +164,11 @@ A mission planner updates the parameters of an existing mission (e.g., correctin
 - Mission names are unique within the system; the system rejects duplicate names with a validation error.
 - The system is a single-user planning tool; multi-user collaboration and authentication are out of scope.
 - Missions are persisted between sessions using a local JSON file store. This is an intentional PoC-stage decision; the storage layer is expected to be migrated to SQL Server in a future iteration. The REST API contract MUST NOT expose storage implementation details.
-- Readiness evaluation is computed entirely from the delta-v values provided; no external orbital mechanics data or calculations are required.
+- Readiness evaluation is driven by delta-v values and, for crewed missions, crew assignment. No external orbital mechanics data or calculations are required.
+- Mission control mode is either “Crewed” or “Probe” and is a required field. It controls which mode-specific fields (crew list or probe core) are shown and validated.
+- KSP stock probe cores: Stayputnik, Probodobodyne OKTO, Probodobodyne HECS, Probodobodyne QBE, Probodobodyne OKTO2, Probodobodyne HECS2, Probodobodyne RoveMate, RC-001S Remote Guidance Unit, RC-L01 Remote Guidance Unit, MK2 Drone Core. An “Other” free-text option supports modded probe cores.
+- A crewed mission with an empty crew list is treated as “Not Ready” (not “At Risk”) because a crewed launch with no assigned crew is not a launchable mission, not merely a marginal one.
+- Crew members are stored as plain strings (kerbal names). A future crew management feature will introduce crew profiles and mission-crew relationships; this spec treats crew members as a simple string array only.
+- Kerbin Mission Time is stored internally as total Kerbin seconds (64-bit integer, `long`). Display format: `Yy, Dd, Hh, Mm, Ss`. Kerbin calendar constants: 1 minute = 60 s, 1 hour = 60 min = 3,600 s, 1 day = 6 h = 21,600 s, 1 year = 426 d = 9,201,600 s.
+- Start Mission Time and End Mission Time are optional fields with no impact on readiness state. End MT set without Start MT generates a non-blocking advisory warning. End MT earlier than Start MT is a blocking validation error.
 - The frontend is responsive and accessible on desktop and tablet; phone-sized viewports are out of scope.
