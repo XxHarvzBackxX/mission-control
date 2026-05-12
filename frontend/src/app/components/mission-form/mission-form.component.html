@@ -1,0 +1,94 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Edit Mission' : 'New Mission' }}</h2>
+
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Mission Name</label>
+      <input id="name" type="text" [(ngModel)]="name" name="name" required maxlength="200" />
+    </div>
+
+    <div class="form-group" *ngIf="referenceData">
+      <label for="targetBody">Target Body</label>
+      <select id="targetBody" [(ngModel)]="targetBodyValue" name="targetBody" (ngModelChange)="onTargetBodyChange()">
+        <option value="" disabled>Select target body...</option>
+        <option *ngFor="let body of referenceData.targetBodies" [value]="body">{{ body }}</option>
+        <option value="Other">Other (custom)</option>
+      </select>
+      <input *ngIf="targetBodyIsCustom" type="text" [(ngModel)]="customTargetBody" name="customTargetBody"
+             placeholder="Enter custom body name" style="margin-top: 4px" />
+    </div>
+
+    <div class="form-group" *ngIf="referenceData">
+      <label for="missionType">Mission Type</label>
+      <select id="missionType" [(ngModel)]="missionTypeValue" name="missionType" (ngModelChange)="onMissionTypeChange()">
+        <option value="" disabled>Select mission type...</option>
+        <option *ngFor="let t of referenceData.missionTypes" [value]="t">{{ t }}</option>
+        <option value="Other">Other (custom)</option>
+      </select>
+      <input *ngIf="missionTypeIsCustom" type="text" [(ngModel)]="customMissionType" name="customMissionType"
+             placeholder="Enter custom mission type" style="margin-top: 4px" />
+    </div>
+
+    <div class="form-group">
+      <label for="availableDv">Available Delta-V (m/s)</label>
+      <input id="availableDv" type="number" [(ngModel)]="availableDeltaV" name="availableDv" min="0.01" step="any" required />
+    </div>
+
+    <div class="form-group">
+      <label for="requiredDv">Required Delta-V (m/s)</label>
+      <input id="requiredDv" type="number" [(ngModel)]="requiredDeltaV" name="requiredDv" min="0.01" step="any" required />
+    </div>
+
+    <div class="form-group">
+      <label>Mission Control Mode</label>
+      <div class="mode-toggle">
+        <label><input type="radio" [(ngModel)]="controlMode" name="controlMode" value="Crewed" /> Crewed</label>
+        <label><input type="radio" [(ngModel)]="controlMode" name="controlMode" value="Probe" /> Probe</label>
+      </div>
+    </div>
+
+    <!-- Crew Members (Crewed mode) -->
+    <div class="form-group" *ngIf="controlMode === 'Crewed'">
+      <label>Crew Members</label>
+      <div class="crew-list">
+        <div *ngFor="let member of crewMembers; let i = index; trackBy: trackByIndex" class="crew-item">
+          <input type="text" [(ngModel)]="crewMembers[i]" [name]="'crew_' + i" placeholder="Kerbal name" />
+          <button type="button" class="btn btn-danger btn-small" (click)="removeCrewMember(i)"
+                  *ngIf="crewMembers.length > 1">&times;</button>
+        </div>
+        <button type="button" class="btn btn-secondary btn-small" (click)="addCrewMember()">+ Add crew member</button>
+      </div>
+    </div>
+
+    <!-- Probe Core (Probe mode) -->
+    <div class="form-group" *ngIf="controlMode === 'Probe' && referenceData">
+      <label for="probeCore">Probe Core</label>
+      <select id="probeCore" [(ngModel)]="probeCoreValue" name="probeCore" (ngModelChange)="onProbeCoreChange()">
+        <option value="" disabled>Select probe core...</option>
+        <option *ngFor="let core of referenceData.probeCores" [value]="core">{{ core }}</option>
+        <option value="Other">Other (custom)</option>
+      </select>
+      <input *ngIf="probeCoreIsCustom" type="text" [(ngModel)]="customProbeCore" name="customProbeCore"
+             placeholder="Enter custom probe core name" style="margin-top: 4px" />
+    </div>
+
+    <div class="form-group">
+      <label for="startTime">Start Mission Time (Kerbin seconds, optional)</label>
+      <input id="startTime" type="number" [(ngModel)]="startMissionTime" name="startTime" min="0" step="1" />
+    </div>
+
+    <div class="form-group">
+      <label for="endTime">End Mission Time (Kerbin seconds, optional)</label>
+      <input id="endTime" type="number" [(ngModel)]="endMissionTime" name="endTime" min="0" step="1" />
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-top: 20px;">
+      <button type="submit" class="btn btn-primary" [disabled]="saving">
+        {{ saving ? 'Saving...' : (isEditMode ? 'Update Mission' : 'Create Mission') }}
+      </button>
+      <button type="button" class="btn btn-secondary" routerLink="/">Cancel</button>
+    </div>
+  </form>
+</div>

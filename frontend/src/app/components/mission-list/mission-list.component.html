@@ -1,0 +1,31 @@
+<div class="list-container">
+  <div class="header">
+    <h2>Missions</h2>
+    <a routerLink="/missions/new" class="btn btn-primary">+ New Mission</a>
+  </div>
+
+  <div *ngIf="loading">Loading...</div>
+
+  <div *ngIf="!loading && missions.length === 0" class="empty">
+    <p>No missions yet. Create your first mission to get started!</p>
+  </div>
+
+  <table *ngIf="!loading && missions.length > 0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Mode</th>
+        <th>Crew / Core</th>
+        <th>Readiness</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let mission of missions">
+        <td><a class="mission-link" [routerLink]="['/missions', mission.id]">{{ mission.name }}</a></td>
+        <td>{{ mission.controlMode }}</td>
+        <td>{{ mission.controlMode === 'Crewed' ? (mission.crewSummary || 'No crew') : (mission.probeCoreValue || 'N/A') }}</td>
+        <td><span class="readiness" [ngClass]="mission.readinessState">{{ formatReadiness(mission.readinessState) }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,24 @@
+/* Global styles */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1f2937;
+  background: #f9fafb;
+}
+
+a { color: #2563eb; }
+
+@media (max-width: 768px) {
+  .form-container, .summary-container, .list-container {
+    padding: 12px !important;
+    max-width: 100% !important;
+  }
+  .detail-row { flex-direction: column; }
+  .detail-label { width: auto; margin-bottom: 2px; }
+  table { font-size: 0.85rem; }
+  th, td { padding: 6px 8px; }
+}

@@ -1,6 +1,19 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.1.0 → 1.2.0
+Modified principles: Technology Stack (Testing framework changed from xUnit to NUnit)
+Added sections: N/A
+Removed sections: N/A
+Templates reviewed:
+  - .specify/templates/plan-template.md  ✅ no xUnit references
+  - .specify/templates/spec-template.md  ✅ no xUnit references
+  - .specify/templates/tasks-template.md ✅ no xUnit references
+Follow-up TODOs: Update all existing plan.md files referencing xUnit → NUnit
+-->
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 1.0.0 → 1.1.0
 Modified principles: IX. Purposeful Documentation (added)
 Added sections:
@@ -96,7 +109,7 @@ or duplicating implementation details. Comments that merely restate the code (e.
 |----------|-------------------------|------------------------------------------------------|
 | Frontend | Angular (latest stable) | Component-driven; no framework mixing                |
 | Backend  | .NET Web API            | DDD layering; strongly typed DTOs at all boundaries  |
-| Testing  | xUnit (.NET) / Karma + Jasmine (Angular) | Unit tests mandatory for domain logic |
+| Testing  | NUnit (.NET) / Karma + Jasmine (Angular) | Unit tests mandatory for domain logic |
 
 The technology choices above are load-bearing constraints. Introducing an additional framework
 or replacing a listed technology requires a constitution amendment.
@@ -126,4 +139,4 @@ changes to all dependent templates under `.specify/templates/`.
 pull-request review. Exceptions require explicit, documented justification recorded in the
 Complexity Tracking section of the relevant `plan.md`.
 
-**Version**: 1.1.0 | **Ratified**: 2026-05-12 | **Last Amended**: 2026-05-12
+**Version**: 1.2.0 | **Ratified**: 2026-05-12 | **Last Amended**: 2026-05-12

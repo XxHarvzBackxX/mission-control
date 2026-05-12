@@ -1,1 +1,28 @@
 /.github
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.log
+.vs/
+
+# Node.js / Angular
+node_modules/
+dist/
+.angular/
+.env*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+# Mission data (runtime)
+data/
