@@ -74,9 +74,7 @@ backend/
 │   │   └── WarningType.cs
 │   ├── ValueObjects/
 │   │   ├── Warning.cs
-│   │   ├── MissionBodyValue.cs
-│   │   ├── MissionTypeValue.cs
-│   │   ├── ProbeCoreValue.cs
+│   │   ├── KspBodyValue.cs          # single value object covers target body, mission type, and probe core (Value + IsCustom)
 │   │   └── KerbinTime.cs
 │   ├── Services/
 │   │   └── ReadinessCalculator.cs
@@ -108,6 +106,10 @@ frontend/
 ├── src/
 │   └── app/
 │       ├── components/
+│       │   ├── shared/
+│       │   │   └── warning-badge/
+│       │   │       ├── warning-badge.component.ts
+│       │   │       └── warning-badge.component.html
 │       │   ├── mission-list/
 │       │   │   ├── mission-list.component.ts
 │       │   │   ├── mission-list.component.html
