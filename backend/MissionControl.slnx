@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MissionControl.Api/MissionControl.Api.csproj" />
+  <Project Path="MissionControl.Domain/MissionControl.Domain.csproj" />
+  <Project Path="MissionControl.Infrastructure/MissionControl.Infrastructure.csproj" />
+  <Project Path="MissionControl.Tests/MissionControl.Tests.csproj" />
+</Solution>
