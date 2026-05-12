@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create a web application that allows users to define space missions and determine whether a mission is ready for launch.
+Create a web application that allows users to define space missions for the game 'Kerbal Space Program' and determine whether a mission is ready for launch.
 
 ## Functional Requirements
 
