@@ -6,17 +6,17 @@
 
 ## Summary
 
-A full-stack KSP mission readiness planner: an Angular TypeScript SPA (frontend) backed by an ASP.NET Core Web API (backend) that evaluates mission feasibility from delta-v inputs. Users create, view, edit, and delete missions; the system derives a readiness state (Ready / At Risk / Not Ready) and attaches red-box warnings for insufficient delta-v, low reserve margin, or missing fields. Mission data is persisted to a local JSON file store for the PoC, with the storage layer abstracted behind a repository interface ready for a SQL Server migration.
+A full-stack KSP mission readiness planner: an Angular TypeScript SPA (frontend) backed by an ASP.NET Core Web API (backend). Users create, view, edit, and delete missions. Each mission captures delta-v budget, mission control mode (Crewed or Probe), mode-specific fields (crew names or probe core), optional Kerbin Mission Times, target body, and mission type. The domain evaluates readiness (Ready / At Risk / Not Ready) from delta-v margin and crew assignment, and attaches typed warnings rendered as red indicator boxes. Mission data is persisted to a local JSON file store for the PoC, abstracted behind a repository interface ready for SQL Server migration.
 
 ## Technical Context
 
 **Language/Version**: C# 12 / .NET 8 (backend) · TypeScript / Angular latest stable (frontend)
 
-**Primary Dependencies**: ASP.NET Core Web API · Angular · NUnit (backend tests) · Karma + Jasmine (frontend tests)
+**Primary Dependencies**: ASP.NET Core Web API · Angular · NUnit 4 + NSubstitute (backend tests) · Karma + Jasmine (frontend tests)
 
 **Storage**: Local JSON file store (PoC) — abstracted behind `IMissionRepository`; planned migration to SQL Server post-PoC
 
-**Testing**: NUnit — domain unit tests (backend) · Karma + Jasmine — component/service unit tests (frontend)
+**Testing**: NUnit 4 — domain unit tests (backend) · Karma + Jasmine — component/service unit tests (frontend)
 
 **Target Platform**: Web browser — desktop and tablet viewport sizes
 
@@ -24,7 +24,7 @@ A full-stack KSP mission readiness planner: an Angular TypeScript SPA (frontend)
 
 **Performance Goals**: Readiness calculation instantaneous (pure in-memory computation, no I/O on critical path)
 
-**Constraints**: No authentication; single-user; JSON file store for PoC; API contract MUST be storage-agnostic; phone viewports out of scope
+**Constraints**: No authentication; single-user; JSON file store for PoC; API contract storage-agnostic; phone viewports out of scope; crew management (profiles, assignments) out of scope
 
 **Scale/Scope**: Single-user PoC; dozens of missions; no concurrency requirements
 
@@ -34,14 +34,14 @@ A full-stack KSP mission readiness planner: an Angular TypeScript SPA (frontend)
 
 | Principle | Status | Notes |
 |-----------|--------|-------|
-| I. Modular Architecture | ✅ PASS | Angular SPA and .NET Web API are fully separate layers with no shared state |
-| II. Component-Driven Frontend | ✅ PASS | UI delivered as discrete standalone Angular components (mission-list, mission-form, mission-summary) |
-| III. Domain-Driven Backend | ✅ PASS | Domain layer: `Mission` aggregate, `ReadinessState` enum, `Warning` value object, `ReadinessCalculator` domain service |
-| IV. Business Logic Isolation | ✅ PASS | Readiness calculation lives exclusively in the domain layer; controllers map DTOs only |
-| V. Deterministic Calculations | ✅ PASS | `ReadinessCalculator` is a pure function — same delta-v inputs always produce the same state and warnings |
-| VI. Unit Test Coverage | ✅ PASS | `ReadinessCalculator` and `Mission` aggregate MUST have full unit test coverage including boundary and edge cases |
-| VII. Readability First | ✅ PASS | No premature optimization; simple JSON file I/O; no over-engineering for PoC scope |
-| VIII. Minimal Dependencies | ✅ PASS | No third-party libraries beyond the mandated stack (Angular, ASP.NET Core, NUnit, Karma+Jasmine) |
+| I. Modular Architecture | ✅ PASS | Angular SPA and .NET Web API fully separate; no shared state |
+| II. Component-Driven Frontend | ✅ PASS | Standalone Angular components: mission-list, mission-form, mission-summary |
+| III. Domain-Driven Backend | ✅ PASS | Domain layer: `Mission` aggregate, `ReadinessState` enum, `Warning` value object, `KerbinTime` value object, `MissionControlMode` enum, `ReadinessCalculator` domain service |
+| IV. Business Logic Isolation | ✅ PASS | Readiness logic (including MissingCrew rule) lives exclusively in domain; controllers map DTOs only |
+| V. Deterministic Calculations | ✅ PASS | `ReadinessCalculator` is a pure function — same inputs always produce the same state and warnings |
+| VI. Unit Test Coverage | ✅ PASS | `ReadinessCalculator` and `Mission` aggregate covered by NUnit tests including all warning types and edge cases |
+| VII. Readability First | ✅ PASS | No premature optimisation; no CQRS/MediatR; simple JSON file I/O |
+| VIII. Minimal Dependencies | ✅ PASS | NUnit + NSubstitute for mocking (constitution-mandated testing; NSubstitute justified for repository interface mocking in isolation tests) |
 | IX. Purposeful Documentation | ✅ PASS | XML doc comments on public API surface and non-obvious domain logic only |
 
 **Gate result**: All principles pass. Proceeding to Phase 0.
@@ -68,11 +68,16 @@ backend/
 ├── MissionControl.Domain/
 │   ├── Entities/
 │   │   └── Mission.cs
-│   ├── ValueObjects/
+│   ├── Enums/
 │   │   ├── ReadinessState.cs
+│   │   ├── MissionControlMode.cs
+│   │   └── WarningType.cs
+│   ├── ValueObjects/
 │   │   ├── Warning.cs
-│   │   ├── TargetBody.cs
-│   │   └── MissionType.cs
+│   │   ├── MissionBodyValue.cs
+│   │   ├── MissionTypeValue.cs
+│   │   ├── ProbeCoreValue.cs
+│   │   └── KerbinTime.cs
 │   ├── Services/
 │   │   └── ReadinessCalculator.cs
 │   └── Interfaces/
@@ -87,12 +92,15 @@ backend/
 │   │   ├── CreateMissionDto.cs
 │   │   ├── UpdateMissionDto.cs
 │   │   ├── MissionSummaryDto.cs
-│   │   └── MissionListItemDto.cs
+│   │   ├── MissionListItemDto.cs
+│   │   ├── WarningDto.cs
+│   │   └── ReferenceDataDto.cs
 │   └── Program.cs
 └── MissionControl.Tests/
     ├── Domain/
     │   ├── ReadinessCalculatorTests.cs
-    │   └── MissionTests.cs
+    │   ├── MissionTests.cs
+    │   └── KerbinTimeTests.cs
     └── Api/
         └── MissionsControllerTests.cs
 
@@ -120,10 +128,11 @@ frontend/
 └── angular.json
 ```
 
-**Structure Decision**: Option 2 (Web Application) — `backend/` hosts the .NET solution with four projects (Domain, Infrastructure, Api, Tests); `frontend/` hosts the Angular SPA. The four-project backend structure is mandated by the constitution's DDD requirement (Principle III) and the storage-layer abstraction needed for the JSON→SQL Server migration path.
+**Structure Decision**: Option 2 (Web Application) — `backend/` hosts the .NET solution with four projects (Domain, Infrastructure, Api, Tests); `frontend/` hosts the Angular SPA. The four-project backend is required by the constitution's DDD mandate and the storage-layer abstraction for the JSON→SQL Server migration path.
 
 ## Complexity Tracking
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|--------------------------------------|
-| 4 backend projects (vs. 1) | Constitution Principle III mandates domain isolation; Infrastructure must be separated to enable SQL Server migration without touching the domain or API | A single project would couple `ReadinessCalculator` to `JsonMissionRepository`, violating Principle IV and making the migration path invasive |
+| 4 backend projects (vs. 1) | Constitution Principle III mandates domain isolation; Infrastructure must be separated to enable SQL Server migration without touching domain or API | A single project would couple `ReadinessCalculator` to `JsonMissionRepository`, violating Principle IV and making the migration path invasive |
+| NSubstitute dependency | `IMissionRepository` must be mocked in controller tests to satisfy Principle VI (tests runnable with no infrastructure dependencies); NSubstitute is the minimal, well-understood option for interface mocking in .NET | Writing manual test doubles for every test would add significant boilerplate and reduce test clarity (Principle VII) |

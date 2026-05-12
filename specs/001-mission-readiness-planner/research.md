@@ -1,96 +1,152 @@
 # Research: Mission Readiness Planner
 
-**Phase**: 0 | **Date**: 2026-05-12 | **Plan**: [plan.md](plan.md)
+**Phase**: 0 | **Date**: 2026-05-12 (updated after amendment) | **Plan**: [plan.md](plan.md)
 
 ## Research Tasks
 
-The Technical Context had no NEEDS CLARIFICATION markers. Research focused on confirming best practices for the four key design decisions implied by the feature and constitution constraints.
+Research covers the original four design decisions plus three additional topics introduced by the spec amendment (NUnit, MissionControlMode conditional validation, KerbinTime encoding, warning severity model).
 
 ---
 
 ### 1. JSON File Persistence in ASP.NET Core (Repository Pattern)
 
-**Decision**: Implement a `JsonMissionRepository` class in `MissionControl.Infrastructure` that reads/writes a single `missions.json` file using `System.Text.Json`. The file path is injected via `IOptions<JsonStorageOptions>` from `appsettings.json`. The class implements `IMissionRepository` defined in the domain layer — the API project and domain layer have zero knowledge of the file system.
+**Decision**: Implement `JsonMissionRepository : IMissionRepository` in `MissionControl.Infrastructure`. Reads/writes a single `missions.json` via `System.Text.Json`. File path injected via `IOptions<JsonStorageOptions>` from `appsettings.json`. Domain and API layers have zero knowledge of the file system.
 
-**Rationale**: `System.Text.Json` is built into .NET 8 with no additional dependencies (Principle VIII). The repository interface boundary ensures the JSON file is a pluggable adapter, not a hard dependency — fulfilling the SQL Server migration path requirement and Principle I (modular architecture). Using `IOptions<T>` for the file path avoids hardcoding and enables environment-specific configuration without code changes.
+**Rationale**: `System.Text.Json` is in-box (.NET 8); no additional packages needed (Principle VIII). Repository interface ensures the JSON file is a pluggable adapter — fulfilling the SQL Server migration path and Principle I. `IOptions<T>` avoids hardcoding and enables environment-specific config without code changes.
 
 **Alternatives Considered**:
-- *LiteDB / SQLite for PoC*: Would work but introduces a third-party dependency (Principle VIII violation) with no additional value for a single-user PoC.
-- *In-memory dictionary*: Rejected because the spec explicitly requires sessions to be persisted.
-- *EF Core with SQLite*: Heavier than needed for PoC; EF Core also pulls in additional packages.
+- *LiteDB / SQLite*: Third-party dependency, no additional PoC value (Principle VIII violation).
+- *In-memory dictionary*: Rejected — spec requires session persistence.
+- *EF Core with SQLite*: Over-engineered for PoC; additional packages.
 
-**Boundary Condition**: Concurrent write safety is out of scope for the single-user PoC. The repository may use a simple file lock (`SemaphoreSlim`) to protect against unlikely race conditions from rapid API calls, without investing in full concurrency infrastructure.
+**Boundary Condition**: `SemaphoreSlim(1,1)` file lock protects against concurrent API requests. No full concurrency infrastructure needed for single-user PoC.
 
 ---
 
 ### 2. Angular Standalone Components (Latest Angular)
 
-**Decision**: Use Angular standalone components (no `NgModule`). All components (`MissionListComponent`, `MissionFormComponent`, `MissionSummaryComponent`) are declared with `standalone: true` and imported directly into the root `AppComponent` or lazy-loaded routes as needed.
+**Decision**: All components (`MissionListComponent`, `MissionFormComponent`, `MissionSummaryComponent`) use `standalone: true`. No `NgModule`.
 
-**Rationale**: Standalone components are the default and recommended approach in Angular v17+. They eliminate `NgModule` boilerplate, improve tree-shaking, and align with Angular's official guidance. Using `NgModule` in a new project targeting the latest stable Angular would be working against the framework's direction.
+**Rationale**: Default approach in Angular v17+. Eliminates boilerplate, improves tree-shaking, aligns with Angular's direction. Using NgModules in a new project would be working against the framework.
 
 **Alternatives Considered**:
-- *NgModule-based architecture*: Rejected — NgModules are a legacy pattern in Angular v17+; new projects should not use them.
-- *React / Vue*: Rejected — constitution mandates Angular (Technology Stack constraint).
+- *NgModule-based*: Legacy pattern in Angular v17+; rejected.
+- *React / Vue*: Constitution mandates Angular (Technology Stack constraint).
 
 ---
 
-### 3. KSP Stock Celestial Bodies and Mission Types
+### 3. KSP Stock Celestial Bodies, Mission Types, and Probe Cores
 
-**Decision**: The following predefined lists will be used for the hybrid dropdown fields. An "Other (custom)" option at the end of each list allows free-text entry for modded content.
+**Target Bodies** (KSP stock): Kerbol, Moho, Eve, Gilly, Kerbin, Mun, Minmus, Duna, Ike, Dres, Jool, Laythe, Vall, Tylo, Bop, Pol, Eeloo, Other (custom)
 
-**Target Bodies** (KSP stock solar system):
-- Kerbol (Sun)
-- Moho
-- Eve
-- Gilly
-- Kerbin
-- Mun
-- Minmus
-- Duna
-- Ike
-- Dres
-- Jool
-- Laythe
-- Vall
-- Tylo
-- Bop
-- Pol
-- Eeloo
-- Other (custom)
+**Mission Types**: Orbital, Landing, Flyby, Transfer, Rescue, Station Resupply, Return, Other (custom)
 
-**Mission Types** (KSP common mission categories):
-- Orbital
-- Landing
-- Flyby
-- Transfer
-- Rescue
-- Station Resupply
-- Return
-- Other (custom)
+**Probe Cores** (KSP stock): Stayputnik, Probodobodyne OKTO, Probodobodyne HECS, Probodobodyne QBE, Probodobodyne OKTO2, Probodobodyne HECS2, Probodobodyne RoveMate, RC-001S Remote Guidance Unit, RC-L01 Remote Guidance Unit, MK2 Drone Core, Other (custom)
 
-**Rationale**: These are the complete stock KSP2-era and KSP1 celestial bodies. Encoding them as a server-side constant avoids magic strings scattered across layers. The "Other" option is the escape hatch for Outer Planets Mod (OPM), JNSQ, Galileo's Planet Pack, and similar mods.
+**Decision**: Encode all three lists as domain-layer constants. The "Other (custom)" option is injected by the frontend UI — it is not part of the `GET /api/missions/reference-data` response. When a custom value is submitted, `IsCustom: true` signals the backend to skip predefined-list validation.
 
-**Alternatives Considered**:
-- *Hardcode only Tier 1 bodies (Kerbin, Mun, Duna)*: Too restrictive for real planning use.
-- *Free text only*: Rejected during clarification in favour of the hybrid approach.
+**Rationale**: Avoids magic strings scattered across layers. Constants in the domain layer keep the lists as the single source of truth. The escape hatch supports Outer Planets Mod, JNSQ, Galileo's Planet Pack, and similar mods.
 
 ---
 
-### 4. DDD Layering for a Simple CRUD + Calculation Domain in .NET 8
+### 4. DDD Layering for .NET 8
 
-**Decision**: Use a lightweight DDD structure with four projects as documented in `plan.md`. The `Mission` class is a rich aggregate root with encapsulated validation and state derivation (not an anemic model). `ReadinessCalculator` is a stateless domain service — a static class with a single `Calculate(double availableDv, double requiredDv): ReadinessResult` method.
-
-**Rationale**: Constitution Principle III mandates DDD layering and Principle IV mandates business logic isolation. The rich aggregate model keeps `ReadinessState` and `Warnings` derived from `Mission`'s own data, making the aggregate the single source of truth. A stateless calculator service cleanly satisfies Principle V (deterministic calculations).
+**Decision**: Four-project solution as documented in `plan.md`. `Mission` is a rich aggregate root. `ReadinessCalculator` is a stateless domain service. `KerbinTime` and `ProbeCoreValue` are value objects.
 
 **Key design decisions**:
-- `Mission.Id` is a `Guid` generated at creation — opaque, storage-agnostic identity.
-- `ReadinessState` is an `enum` (not a string) to prevent invalid states at compile time.
-- `Warning` is a value object with a `WarningType` enum and a `Message` string — enables multiple warnings per mission and makes warning types independently testable.
-- `TargetBody` and `MissionType` are represented as a small value object pair: `(string Value, bool IsCustom)` — the predefined list is validated in the domain; custom values pass through with `IsCustom = true`.
-- Controllers return strongly typed DTOs only (Principle III) — no anonymous objects, no raw entity exposure.
+- `Mission.Id` is a `Guid` generated at creation.
+- `ReadinessState` is an `enum` (compile-time safety).
+- `Warning` is a value object with `WarningType`, `Message`, and `IsBlocking` — enables independent accumulation of blocking and advisory warnings.
+- `KerbinTime` is a `readonly record struct` wrapping `long TotalSeconds` with conversion and formatting logic.
+- `MissionControlMode` is a two-value enum (`Crewed | Probe`); conditional field requirements are enforced inside the `Mission.Create/Update` factory, not in the controller.
+- `ReadinessCalculator` signature: `Calculate(double availableDv, double requiredDv, MissionControlMode mode, IReadOnlyList<string> crewMembers) : ReadinessResult`.
 
 **Alternatives Considered**:
-- *Anemic domain model*: Rejected — would push business logic into services or controllers (Principle IV violation).
-- *Single project with folders*: Rejected — would couple infrastructure to domain, blocking the SQL Server migration (Principle I violation; Complexity Tracking entry in plan.md justifies the 4-project structure).
+- *Anemic domain model*: Rejected — pushes business logic to services/controllers (Principle IV violation).
+- *Single project*: Rejected — couples infrastructure to domain (Principle I violation).
 - *MediatR / CQRS*: Rejected — over-engineering for a single aggregate PoC (Principle VII).
+
+---
+
+### 5. NUnit 4 as Backend Testing Framework (Constitution Amendment v1.2.0)
+
+**Decision**: Use NUnit 4 with FluentAssertions for readable assertions and NSubstitute for repository mocking. Replace any prior xUnit references.
+
+**Rationale**: NUnit is the constitution-mandated framework as of v1.2.0. NUnit 4 is the current major release targeting .NET 8. FluentAssertions and NSubstitute are minimal, well-understood companions that satisfy Principle VIII (justified value; no alternatives provide the same assertion fluency or interface-mocking capability without similar dependency weight).
+
+**NUnit 4 test structure for domain tests**:
+```csharp
+[TestFixture]
+public class ReadinessCalculatorTests
+{
+    [Test]
+    public void Calculate_WhenAvailableExceedsRequired_ReturnsReady() { ... }
+
+    [TestCase(5000, 5000, ReadinessState.AtRisk)]
+    [TestCase(4999, 5000, ReadinessState.NotReady)]
+    public void Calculate_BoundaryConditions(double available, double required, ReadinessState expected) { ... }
+}
+```
+
+**Alternatives Considered**:
+- *xUnit*: Previously specified; superseded by constitution amendment v1.2.0.
+- *MSTest*: Less ergonomic; not standard for new .NET projects.
+
+---
+
+### 6. KerbinTime Value Object Encoding
+
+**Decision**: Store as `long TotalSeconds` (total Kerbin seconds since mission epoch T=0). Display as `Yy, Dd, Hh, Mm, Ss`. Transmitted over the API as a plain `long` (integer seconds). Frontend formats for display using a shared utility function.
+
+**Kerbin calendar constants**:
+- 1 minute = 60 s
+- 1 hour = 60 min = 3,600 s
+- 1 Kerbin day = 6 hours = 21,600 s
+- 1 Kerbin year = 426 days = 9,201,600 s
+
+**Decomposition algorithm**:
+```
+years  = totalSeconds / 9,201,600
+rem    = totalSeconds % 9,201,600
+days   = rem / 21,600
+rem    = rem % 21,600
+hours  = rem / 3,600
+rem    = rem % 3,600
+minutes = rem / 60
+seconds = rem % 60
+```
+
+**Rationale**: A `long` is the simplest lossless representation with no ambiguity about calendar drift or leap seconds (KSP has none). Storing formatted strings would couple the storage layer to a display decision. Transmitting as integer keeps the API contract storage- and locale-agnostic.
+
+**Validation**: `TotalSeconds >= 0` (negative mission time is invalid). `EndMissionTime.TotalSeconds > StartMissionTime.TotalSeconds` when both are set (enforced in `Mission.Update`).
+
+**Alternatives Considered**:
+- *ISO 8601 string*: Real-world time format, not KSP-native — would require client-side conversion and adds confusion.
+- *Separate year/day/hour/minute/second fields*: More fields to validate and store; single `long` is simpler and faster to compare.
+
+---
+
+### 7. Warning Severity Model (Blocking vs. Advisory)
+
+**Decision**: `Warning` value object gains an `IsBlocking` boolean property. Blocking warnings (`true`) prevent the mission from being saved. Advisory warnings (`false`) are informational only — the mission saves normally.
+
+**Blocking warnings** (prevent save):
+- `InsufficientDeltaV`
+- `LowReserveMargin` — note: this does NOT block save on its own; a mission with AtRisk state (low margin but sufficient ΔV) CAN be saved
+- `MissingRequiredField`
+- `MissingCrew` (Crewed mode, empty crew list)
+- `InvalidTimeRange` (End MT < Start MT)
+
+**Correction**: `LowReserveMargin` on its own (AtRisk) is NOT blocking — the mission is valid and can be saved. Only `InsufficientDeltaV` (NotReady) is blocking from the delta-v perspective. Clarifying the blocking rules:
+
+| Warning | Blocks Save? | Reason |
+|---------|-------------|--------|
+| `InsufficientDeltaV` | Yes | Mission is not viable |
+| `LowReserveMargin` | No | Mission is marginal but viable (AtRisk); user's informed choice |
+| `MissingRequiredField` | Yes | Required data absent |
+| `MissingCrew` | Yes | Crewed mission with no crew is not launchable |
+| `InvalidTimeRange` | Yes | End MT before Start MT is logically invalid |
+| `AdvisoryEndTimeWithoutStart` | No | End MT set without Start MT is unusual but not invalid |
+
+**Rationale**: Distinguishing blocking from advisory prevents over-validation. An "At Risk" mission should be saveable — the user may intentionally accept the risk. Forcing a block on low-margin missions would make the planner unusable for real KSP scenarios where margins are tight by design.
+
