@@ -20,6 +20,11 @@ public class Mission
     public ReadinessState ReadinessState { get; private set; }
     public IReadOnlyList<Warning> Warnings { get; private set; } = Array.Empty<Warning>();
 
+    // Rocket assignment fields (US2)
+    public Guid? AssignedRocketId { get; private set; }
+    public string? RocketName { get; private set; }
+    public MissionCalculationProfile? CalculationProfile { get; private set; }
+
     private Mission() { }
 
     /// <summary>
@@ -77,13 +82,30 @@ public class Mission
         IReadOnlyList<string> crewMembers,
         KspBodyValue? probeCore,
         KerbinTime? startMissionTime,
-        KerbinTime? endMissionTime)
+        KerbinTime? endMissionTime,
+        Guid? assignedRocketId = null,
+        string? rocketName = null,
+        MissionCalculationProfile? calculationProfile = null)
     {
         var mission = new Mission { Id = id };
         mission.ApplyWithoutValidation(name, targetBody, missionType, availableDeltaV, requiredDeltaV,
             controlMode, crewMembers, probeCore, startMissionTime, endMissionTime);
+        mission.AssignedRocketId = assignedRocketId;
+        mission.RocketName = rocketName;
+        mission.CalculationProfile = calculationProfile;
         mission.EvaluateReadiness();
         return mission;
+    }
+
+    /// <summary>
+    /// Assigns or unassigns a rocket from this mission.
+    /// Pass null to clear the assignment.
+    /// </summary>
+    public void AssignRocket(Guid? rocketId, string? rocketName, MissionCalculationProfile? profile)
+    {
+        AssignedRocketId = rocketId;
+        RocketName = rocketName;
+        CalculationProfile = profile;
     }
 
     private void Apply(

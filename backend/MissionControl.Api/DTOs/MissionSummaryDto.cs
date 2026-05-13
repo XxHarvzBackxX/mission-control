@@ -19,4 +19,10 @@ public class MissionSummaryDto
     public long? StartMissionTime { get; set; }
     public long? EndMissionTime { get; set; }
     public WarningDto[] Warnings { get; set; } = Array.Empty<WarningDto>();
+
+    // Rocket assignment (US2)
+    public Guid? AssignedRocketId { get; set; }
+    public string? RocketName { get; set; }
+    public MissionCalculationProfileDto? CalculationProfile { get; set; }
+    public RequiredDeltaVBreakdownDto? RequiredDeltaVBreakdown { get; set; }
 }

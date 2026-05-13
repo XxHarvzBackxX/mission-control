@@ -76,6 +76,45 @@
       </div>
     </div>
 
+    <!-- Rocket Assignment -->
+    <div class="detail-row" *ngIf="mission.assignedRocketId">
+      <span class="detail-label">Assigned Rocket</span>
+      <span class="detail-value">
+        <a [routerLink]="['/rockets', mission.assignedRocketId]">{{ mission.rocketName }}</a>
+      </span>
+    </div>
+
+    <!-- Required Delta-V Breakdown (T054) -->
+    <div class="dv-breakdown" *ngIf="mission.requiredDeltaVBreakdown as dv">
+      <h3>Required Δv Breakdown</h3>
+      <div class="detail-section">
+        <div class="detail-row">
+          <span class="detail-label">Ascent</span>
+          <span class="detail-value">{{ dv.ascentDeltaV | number:'1.0-0' }} m/s</span>
+        </div>
+        <div class="detail-row" *ngIf="dv.transferDeltaV > 0">
+          <span class="detail-label">Transfer</span>
+          <span class="detail-value">{{ dv.transferDeltaV | number:'1.0-0' }} m/s</span>
+        </div>
+        <div class="detail-row" *ngIf="dv.descentDeltaV > 0">
+          <span class="detail-label">Descent</span>
+          <span class="detail-value">{{ dv.descentDeltaV | number:'1.0-0' }} m/s</span>
+        </div>
+        <div class="detail-row" *ngIf="dv.returnDeltaV > 0">
+          <span class="detail-label">Return</span>
+          <span class="detail-value">{{ dv.returnDeltaV | number:'1.0-0' }} m/s</span>
+        </div>
+        <div class="detail-row total">
+          <span class="detail-label">Total Required</span>
+          <span class="detail-value">{{ dv.totalRequiredDeltaV | number:'1.0-0' }} m/s</span>
+        </div>
+        <div class="detail-row" *ngIf="dv.isApproximated">
+          <span class="detail-label"></span>
+          <span class="detail-value approx-note">⚠ Hohmann approximation — treat as estimate</span>
+        </div>
+      </div>
+    </div>
+
     <div class="actions">
       <a [routerLink]="['/missions', mission.id, 'edit']" class="btn btn-primary">Edit Mission</a>
       <button class="btn btn-danger" (click)="deleteMission()">Delete Mission</button>

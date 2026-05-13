@@ -7,5 +7,17 @@ public enum WarningType
     MissingRequiredField,
     MissingCrew,
     InvalidTimeRange,
-    AdvisoryEndTimeWithoutStart
+    AdvisoryEndTimeWithoutStart,
+
+    // Rocket and calculation warnings
+    NoCommandPart,
+    NoEngine,
+    NoFuelSource,
+    MixedFuelUncertainty,
+    AtmosphericLossApplied,
+    UnstableCraftAssumption,
+    CustomBodyApproximation,
+    ManualOverrideApplied,
+    AsparagusApproximationApplied
 }
+

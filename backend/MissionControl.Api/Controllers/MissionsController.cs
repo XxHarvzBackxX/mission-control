@@ -4,6 +4,7 @@ using MissionControl.Domain;
 using MissionControl.Domain.Entities;
 using MissionControl.Domain.Enums;
 using MissionControl.Domain.Interfaces;
+using MissionControl.Domain.Services;
 using MissionControl.Domain.ValueObjects;
 
 namespace MissionControl.Api.Controllers;
@@ -13,10 +14,20 @@ namespace MissionControl.Api.Controllers;
 public class MissionsController : ControllerBase
 {
     private readonly IMissionRepository _repository;
+    private readonly IRocketRepository _rocketRepo;
+    private readonly IPartCatalogueRepository _partsRepo;
+    private readonly ICelestialBodyRepository _bodiesRepo;
 
-    public MissionsController(IMissionRepository repository)
+    public MissionsController(
+        IMissionRepository repository,
+        IRocketRepository rocketRepo,
+        IPartCatalogueRepository partsRepo,
+        ICelestialBodyRepository bodiesRepo)
     {
         _repository = repository;
+        _rocketRepo = rocketRepo;
+        _partsRepo = partsRepo;
+        _bodiesRepo = bodiesRepo;
     }
 
     [HttpGet("reference-data")]
@@ -57,8 +68,16 @@ public class MissionsController : ControllerBase
             return BadRequest(new { errors = new[] { new { field = "", message = ex.Message } } });
         }
 
+        if (dto.AssignedRocketId.HasValue)
+        {
+            var rocketResult = await AssignRocketToMissionAsync(mission, dto.AssignedRocketId.Value, dto.CalculationProfile);
+            if (rocketResult != null) return rocketResult;
+        }
+
         await _repository.AddAsync(mission);
-        return CreatedAtAction(nameof(GetById), new { id = mission.Id }, ToSummaryDto(mission));
+
+        var summary = await BuildSummaryAsync(mission);
+        return CreatedAtAction(nameof(GetById), new { id = mission.Id }, summary);
     }
 
     [HttpGet("{id:guid}")]
@@ -68,7 +87,8 @@ public class MissionsController : ControllerBase
         if (mission == null)
             return NotFound(new { message = $"Mission '{id}' not found." });
 
-        return Ok(ToSummaryDto(mission));
+        var summary = await BuildSummaryAsync(mission);
+        return Ok(summary);
     }
 
     [HttpGet]
@@ -108,8 +128,20 @@ public class MissionsController : ControllerBase
             return BadRequest(new { errors = new[] { new { field = "", message = ex.Message } } });
         }
 
+        if (dto.AssignedRocketId.HasValue)
+        {
+            var rocketResult = await AssignRocketToMissionAsync(mission, dto.AssignedRocketId.Value, dto.CalculationProfile);
+            if (rocketResult != null) return rocketResult;
+        }
+        else
+        {
+            // Clear any previous rocket assignment
+            mission.AssignRocket(null, null, null);
+        }
+
         await _repository.UpdateAsync(mission);
-        return Ok(ToSummaryDto(mission));
+        var summary = await BuildSummaryAsync(mission);
+        return Ok(summary);
     }
 
     [HttpDelete("{id:guid}")]
@@ -135,6 +167,97 @@ public class MissionsController : ControllerBase
         if (string.IsNullOrWhiteSpace(value))
             return null;
         return new KspBodyValue(value, isCustom);
+    }
+
+    private async Task<ActionResult?> AssignRocketToMissionAsync(
+        Mission mission, Guid rocketId, MissionCalculationProfileDto? profileDto)
+    {
+        var rocket = await _rocketRepo.GetByIdAsync(rocketId);
+        if (rocket == null)
+            return BadRequest(new { errors = new[] { new { field = "assignedRocketId", message = $"Rocket '{rocketId}' not found." } } });
+
+        MissionCalculationProfile? profile = null;
+        if (profileDto != null &&
+            Enum.TryParse<MissionProfileType>(profileDto.ProfileType, ignoreCase: true, out var profileType))
+        {
+            profile = new MissionCalculationProfile(
+                profileDto.LaunchBodyId,
+                profileDto.TargetBodyId,
+                profileType,
+                profileDto.TargetOrbitAltitude,
+                profileDto.AtmosphericEfficiencyMultiplier,
+                profileDto.SafetyMarginPercent,
+                profileDto.RequiredDeltaVOverride);
+        }
+
+        mission.AssignRocket(rocketId, rocket.Name, profile);
+        return null;
+    }
+
+    private async Task<MissionSummaryDto> BuildSummaryAsync(Mission mission)
+    {
+        var reserveMargin = (mission.AvailableDeltaV - mission.RequiredDeltaV) / mission.RequiredDeltaV * 100.0;
+        var dto = new MissionSummaryDto
+        {
+            Id = mission.Id,
+            Name = mission.Name,
+            TargetBodyValue = mission.TargetBody.Value,
+            TargetBodyIsCustom = mission.TargetBody.IsCustom,
+            MissionTypeValue = mission.MissionType.Value,
+            MissionTypeIsCustom = mission.MissionType.IsCustom,
+            AvailableDeltaV = mission.AvailableDeltaV,
+            RequiredDeltaV = mission.RequiredDeltaV,
+            ReserveMarginPercent = Math.Round(reserveMargin, 2),
+            ReadinessState = mission.ReadinessState.ToString(),
+            ControlMode = mission.ControlMode.ToString(),
+            CrewMembers = mission.CrewMembers.ToArray(),
+            ProbeCoreValue = mission.ProbeCore?.Value,
+            ProbeCoreIsCustom = mission.ProbeCore?.IsCustom ?? false,
+            StartMissionTime = mission.StartMissionTime?.TotalSeconds,
+            EndMissionTime = mission.EndMissionTime?.TotalSeconds,
+            Warnings = mission.Warnings.Select(w => new WarningDto
+            {
+                Type = w.Type.ToString(),
+                Message = w.Message,
+                IsBlocking = w.IsBlocking
+            }).ToArray(),
+            AssignedRocketId = mission.AssignedRocketId,
+            RocketName = mission.RocketName,
+            CalculationProfile = mission.CalculationProfile == null ? null : new MissionCalculationProfileDto
+            {
+                LaunchBodyId = mission.CalculationProfile.LaunchBodyId,
+                TargetBodyId = mission.CalculationProfile.TargetBodyId,
+                ProfileType = mission.CalculationProfile.ProfileType.ToString(),
+                TargetOrbitAltitude = mission.CalculationProfile.TargetOrbitAltitude,
+                AtmosphericEfficiencyMultiplier = mission.CalculationProfile.AtmosphericEfficiencyMultiplier,
+                SafetyMarginPercent = mission.CalculationProfile.SafetyMarginPercent,
+                RequiredDeltaVOverride = mission.CalculationProfile.RequiredDeltaVOverride
+            }
+        };
+
+        // Compute required delta-v breakdown if a calculation profile is set
+        if (mission.CalculationProfile != null)
+        {
+            var launchBody = await _bodiesRepo.GetByIdAsync(mission.CalculationProfile.LaunchBodyId);
+            var targetBody = await _bodiesRepo.GetByIdAsync(mission.CalculationProfile.TargetBodyId);
+
+            if (launchBody != null && targetBody != null)
+            {
+                var breakdown = CelestialBodyDeltaVEstimator.Estimate(launchBody, targetBody, mission.CalculationProfile);
+                dto.RequiredDeltaVBreakdown = new RequiredDeltaVBreakdownDto
+                {
+                    TotalRequiredDeltaV = breakdown.TotalRequiredDeltaV,
+                    AscentDeltaV = breakdown.AscentDeltaV,
+                    TransferDeltaV = breakdown.TransferDeltaV,
+                    DescentDeltaV = breakdown.DescentDeltaV,
+                    ReturnDeltaV = breakdown.ReturnDeltaV,
+                    EstimationMethod = breakdown.EstimationMethod,
+                    IsApproximated = breakdown.IsApproximated
+                };
+            }
+        }
+
+        return dto;
     }
 
     private static MissionSummaryDto ToSummaryDto(Mission m)
@@ -163,7 +286,9 @@ public class MissionsController : ControllerBase
                 Type = w.Type.ToString(),
                 Message = w.Message,
                 IsBlocking = w.IsBlocking
-            }).ToArray()
+            }).ToArray(),
+            AssignedRocketId = m.AssignedRocketId,
+            RocketName = m.RocketName
         };
     }
 
@@ -190,7 +315,9 @@ public class MissionsController : ControllerBase
                 Type = w.Type.ToString(),
                 Message = w.Message,
                 IsBlocking = w.IsBlocking
-            }).ToArray()
+            }).ToArray(),
+            AssignedRocketId = m.AssignedRocketId,
+            RocketName = m.RocketName
         };
     }
 }

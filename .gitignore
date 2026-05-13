@@ -24,5 +24,7 @@ Thumbs.db
 *.tmp
 *.swp
 
-# Mission data (runtime)
-data/
+# Mission data (runtime-written — not tracked in source control)
+# Catalogue data (parts.json, celestial-bodies.json) and data/seed/ ARE tracked.
+**/data/missions.json
+**/data/rockets.json

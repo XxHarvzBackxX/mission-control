@@ -1,0 +1,139 @@
+<div class="builder-container">
+  <h2>{{ editId ? 'Edit Rocket' : 'New Rocket' }}</h2>
+
+  <div *ngIf="loading" class="loading-msg">Loading...</div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <ng-container *ngIf="!loading">
+    <div class="form-layout">
+
+      <!-- Left panel: Rocket details + stages -->
+      <div class="left-panel">
+        <section class="form-section">
+          <h3>Rocket Details</h3>
+
+          <div class="form-field">
+            <label>Name *</label>
+            <input type="text" [(ngModel)]="name" placeholder="e.g. Kerbin Express Mk1" />
+          </div>
+
+          <div class="form-field">
+            <label>Description *</label>
+            <textarea [(ngModel)]="description" rows="2" placeholder="Brief description of this rocket"></textarea>
+          </div>
+
+          <div class="form-field">
+            <label>Notes</label>
+            <textarea [(ngModel)]="notes" rows="2" placeholder="Optional notes"></textarea>
+          </div>
+
+          <div class="form-field form-check">
+            <input type="checkbox" id="asparagus" [(ngModel)]="usesAsparagusStaging" (change)="onAsparagusChange()" />
+            <label for="asparagus">Uses Asparagus Staging</label>
+          </div>
+          <p class="hint" *ngIf="usesAsparagusStaging">Note: Asparagus staging has no effect on vacuum launches — the bonus is suppressed automatically for airless bodies.</p>
+
+          <div *ngIf="usesAsparagusStaging" class="form-field asparagus-slider">
+            <label>Asparagus Bonus: {{ (asparagusEfficiencyBonus * 100).toFixed(0) }}%</label>
+            <input type="range" min="0" max="0.20" step="0.01"
+                   [(ngModel)]="asparagusEfficiencyBonus" />
+            <div class="slider-presets">
+              <button type="button" (click)="asparagusEfficiencyBonus = 0.08" [ngClass]="{'active': asparagusEfficiencyBonus === 0.08}">Conservative 8%</button>
+              <button type="button" (click)="asparagusEfficiencyBonus = 0.12" [ngClass]="{'active': asparagusEfficiencyBonus === 0.12}">Moderate 12%</button>
+              <button type="button" (click)="asparagusEfficiencyBonus = 0.15" [ngClass]="{'active': asparagusEfficiencyBonus === 0.15}">Optimistic 15%</button>
+              <button type="button" (click)="asparagusEfficiencyBonus = 0.20" [ngClass]="{'active': asparagusEfficiencyBonus === 0.20}">Aggressive 20%</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="section-header">
+            <h3>Stages</h3>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="addStage()">+ Add Stage</button>
+          </div>
+          <p class="hint">Stage 1 = payload (fires last). Add stages in order: 1, 2, 3…</p>
+
+          <div *ngFor="let stage of stages; let i = index"
+               class="stage-card"
+               [ngClass]="{ 'active': activeStageIndex === i }"
+               (click)="activeStageIndex = i">
+            <div class="stage-header">
+              <div class="stage-info">
+                <input type="number" [(ngModel)]="stage.stageNumber" class="stage-number-input"
+                       (click)="$event.stopPropagation()" />
+                <input type="text" [(ngModel)]="stage.name" placeholder="Stage name"
+                       (click)="$event.stopPropagation()" />
+              </div>
+              <div class="stage-actions">
+                <label class="check-label">
+                  <input type="checkbox" [(ngModel)]="stage.isJettisoned"
+                         (click)="$event.stopPropagation()" />
+                  Jettisoned
+                </label>
+                <button type="button" class="btn-icon" (click)="removeStage(i); $event.stopPropagation()">✕</button>
+              </div>
+            </div>
+
+            <div class="stage-parts">
+              <span *ngIf="stage.parts.length === 0" class="no-parts-msg">
+                Click to select, then pick parts from the catalogue →
+              </span>
+              <div *ngFor="let part of stage.parts; let pi = index" class="part-entry">
+                <span>{{ getPartName(part.partId) }}</span>
+                <input type="number" [(ngModel)]="part.quantity" min="1" class="qty-input"
+                       (click)="$event.stopPropagation()" />
+                <button type="button" class="btn-icon" (click)="removePartFromStage(i, pi); $event.stopPropagation()">✕</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="saving">
+            {{ saving ? 'Saving…' : (editId ? 'Update Rocket' : 'Create Rocket') }}
+          </button>
+          <a routerLink="/rockets" class="btn btn-secondary">Cancel</a>
+        </div>
+      </div>
+
+      <!-- Right panel: Part picker -->
+      <div class="right-panel">
+        <section class="form-section">
+          <h3>Part Catalogue</h3>
+          <p *ngIf="activeStageIndex === null" class="hint">Select a stage on the left to add parts.</p>
+          <p *ngIf="activeStageIndex !== null" class="hint active-hint">
+            Adding to: <strong>{{ stages[activeStageIndex]?.name }}</strong>
+          </p>
+
+          <div class="part-filters">
+            <input type="text" [(ngModel)]="partSearch" (input)="filterParts()"
+                   placeholder="Search by name or ID…" class="search-input" />
+            <select [(ngModel)]="selectedCategory" (change)="filterParts()">
+              <option value="">All Categories</option>
+              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+            </select>
+          </div>
+
+          <div class="part-list">
+            <div *ngFor="let part of filteredParts"
+                 class="part-row"
+                 (click)="addPartToStage(part)">
+              <div class="part-info">
+                <span class="part-name">{{ part.name }}</span>
+                <span class="part-id">{{ part.id }}</span>
+              </div>
+              <div class="part-stats">
+                <span>{{ part.dryMass }}t dry</span>
+                <span *ngIf="part.wetMass !== part.dryMass">/ {{ part.wetMass }}t wet</span>
+                <span *ngIf="part.engineStats">Isp: {{ part.engineStats.ispSeaLevel }}/{{ part.engineStats.ispVacuum }}s</span>
+              </div>
+            </div>
+
+            <div *ngIf="filteredParts.length === 0" class="empty-msg">No parts match your filter.</div>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </ng-container>
+</div>

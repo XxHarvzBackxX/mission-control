@@ -1,0 +1,331 @@
+@use '../../tokens' as t;
+
+.builder-container {
+  // The builder needs more than the default 900px content width for two columns
+  max-width: 1100px;
+
+  h2 {
+    font-size: t.$font-size-xl;
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text-primary;
+    margin-bottom: t.$space-5;
+  }
+}
+
+.loading-msg { color: t.$color-text-secondary; padding: t.$space-4 0; }
+
+.error-msg {
+  color: t.$color-accent-red;
+  background: rgba(t.$color-accent-red, 0.1);
+  border: t.$border-width solid rgba(t.$color-accent-red, 0.3);
+  border-radius: t.$border-radius-sm;
+  padding: t.$space-2 t.$space-3;
+  margin-bottom: t.$space-4;
+  font-size: t.$font-size-base;
+}
+
+.form-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: t.$space-5;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Section panels ────────────────────────────────────────────────────────────
+
+.form-section {
+  background: t.$color-bg-surface;
+  border: t.$border-width solid t.$color-border;
+  border-radius: t.$border-radius-md;
+  padding: t.$space-4;
+  margin-bottom: t.$space-4;
+
+  h3 {
+    margin: 0 0 t.$space-3;
+    font-size: t.$font-size-sm;
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: t.$space-2;
+
+  h3 { margin: 0; }
+}
+
+// ─── Form fields ───────────────────────────────────────────────────────────────
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: t.$space-3;
+
+  label {
+    font-size: t.$font-size-sm;
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: t.$space-1;
+  }
+
+  // inputs styled globally in styles.scss
+}
+
+.form-check {
+  flex-direction: row;
+  align-items: center;
+  gap: t.$space-2;
+
+  input[type='checkbox'] {
+    width: auto;
+    accent-color: t.$color-accent-cyan;
+    cursor: pointer;
+  }
+
+  label {
+    margin: 0;
+    text-transform: none;
+    letter-spacing: normal;
+    color: t.$color-text-primary;
+    cursor: pointer;
+  }
+}
+
+.asparagus-slider {
+  label { margin-bottom: t.$space-1; }
+
+  input[type='range'] {
+    width: 100%;
+    margin-bottom: t.$space-2;
+    accent-color: t.$color-accent-cyan;
+  }
+}
+
+.slider-presets {
+  display: flex;
+  gap: t.$space-1;
+  flex-wrap: wrap;
+
+  button {
+    padding: 2px 8px;
+    font-size: t.$font-size-sm;
+    border: t.$border-width solid t.$color-border;
+    border-radius: t.$border-radius-sm;
+    background: t.$color-bg-elevated;
+    color: t.$color-text-secondary;
+    cursor: pointer;
+    transition: border-color 0.1s, color 0.1s;
+
+    &.active {
+      border-color: t.$color-accent-blue;
+      color: t.$color-accent-blue;
+      background: rgba(t.$color-accent-blue, 0.1);
+    }
+
+    &:hover:not(.active) {
+      border-color: t.$color-text-secondary;
+      color: t.$color-text-primary;
+    }
+  }
+}
+
+.hint {
+  font-size: t.$font-size-sm;
+  color: t.$color-text-muted;
+  margin: 0 0 t.$space-2;
+}
+
+.active-hint { color: t.$color-accent-blue; }
+
+// ─── Stage cards ───────────────────────────────────────────────────────────────
+
+.stage-card {
+  border: t.$border-width solid t.$color-border;
+  border-radius: t.$border-radius-md;
+  padding: t.$space-3;
+  margin-bottom: t.$space-2;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  background: t.$color-bg-elevated;
+
+  &:hover { border-color: t.$color-accent-blue; }
+
+  &.active {
+    border-color: t.$color-accent-blue;
+    background: rgba(t.$color-accent-blue, 0.07);
+  }
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: t.$space-2;
+}
+
+.stage-info {
+  display: flex;
+  gap: t.$space-2;
+  align-items: center;
+
+  .stage-number-input {
+    width: 56px;
+    padding: t.$space-1 t.$space-2;
+  }
+
+  // stage name input inherits global input styles
+}
+
+.stage-actions {
+  display: flex;
+  align-items: center;
+  gap: t.$space-3;
+}
+
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: t.$space-1;
+  font-size: t.$font-size-sm;
+  color: t.$color-text-secondary;
+  cursor: pointer;
+
+  input[type='checkbox'] {
+    width: auto;
+    accent-color: t.$color-accent-cyan;
+  }
+}
+
+.btn-icon {
+  border: none;
+  background: none;
+  color: t.$color-text-muted;
+  cursor: pointer;
+  font-size: t.$font-size-lg;
+  padding: 0 t.$space-1;
+  line-height: 1;
+
+  &:hover { color: t.$color-accent-red; }
+}
+
+.stage-parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$space-1;
+  min-height: 28px;
+}
+
+.no-parts-msg {
+  font-size: t.$font-size-sm;
+  color: t.$color-text-muted;
+  align-self: center;
+  font-style: italic;
+}
+
+.part-entry {
+  display: flex;
+  align-items: center;
+  gap: t.$space-1;
+  background: t.$color-bg-surface;
+  border: t.$border-width solid t.$color-border;
+  border-radius: t.$border-radius-sm;
+  padding: 2px 6px;
+  font-size: t.$font-size-sm;
+  color: t.$color-text-primary;
+
+  .qty-input {
+    width: 40px;
+    padding: 1px 4px;
+    text-align: center;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: t.$space-3;
+  margin-top: t.$space-2;
+}
+
+// ─── Right panel — Part Catalogue ─────────────────────────────────────────────
+
+.right-panel {
+  position: sticky;
+  top: t.$space-4;
+}
+
+.part-filters {
+  display: flex;
+  gap: t.$space-2;
+  margin-bottom: t.$space-3;
+
+  .search-input { flex: 1; }
+  select { width: 160px; }
+}
+
+.part-list {
+  max-height: 55vh;
+  overflow-y: auto;
+  border: t.$border-width solid t.$color-border;
+  border-radius: t.$border-radius-md;
+  background: t.$color-bg-surface;
+}
+
+.part-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: t.$space-2 t.$space-3;
+  border-bottom: t.$border-width solid t.$color-border-subtle;
+  cursor: pointer;
+  transition: background 0.1s ease;
+
+  &:last-child { border-bottom: none; }
+
+  &:hover {
+    background: t.$color-bg-elevated;
+  }
+}
+
+.part-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .part-name {
+    font-weight: t.$font-weight-medium;
+    font-size: t.$font-size-base;
+    color: t.$color-text-primary;
+  }
+
+  .part-id {
+    font-size: t.$font-size-sm;
+    color: t.$color-text-muted;
+    font-family: monospace;
+  }
+}
+
+.part-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-size: t.$font-size-sm;
+  color: t.$color-text-secondary;
+}
+
+.empty-msg {
+  padding: t.$space-5;
+  text-align: center;
+  color: t.$color-text-muted;
+  font-size: t.$font-size-sm;
+}

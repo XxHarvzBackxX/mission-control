@@ -9,4 +9,8 @@ public class MissionListItemDto
     public string? CrewSummary { get; set; }
     public string? ProbeCoreValue { get; set; }
     public WarningDto[] Warnings { get; set; } = Array.Empty<WarningDto>();
+
+    // Rocket assignment (US2)
+    public Guid? AssignedRocketId { get; set; }
+    public string? RocketName { get; set; }
 }
