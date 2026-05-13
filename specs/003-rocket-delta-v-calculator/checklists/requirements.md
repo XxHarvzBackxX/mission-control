@@ -42,4 +42,5 @@
 - **FR-037 stage numbering (session 2)**: KSP convention — Stage 1 is final/payload (last to fire), highest number fires first. UI shows Stage 1 at top.
 - **Equality boundary (session 2)**: Available ΔV exactly equals required ΔV → Not Ready (zero margin is insufficient).
 - **Profile reuse (session 2)**: Calculation profile settings are inline per mission only. Named reusable profiles deferred to v2.
+- **FR-039 (session 3)**: Asparagus staging approximation control — rocket-level checkbox + 0–20% atmospheric ascent bonus slider. Labels: Conservative (8%), Moderate (12%), Optimistic (15%), Aggressive/Maximum (20%). Default when enabled: 8%. Applies to atmospheric ascent segment only; vacuum/transfer segments unaffected. Suppressed when launch body has no atmosphere. Full crossfeed simulation remains v2.
 - Spec is clear of all implementation details. Ready for `/speckit.plan`.

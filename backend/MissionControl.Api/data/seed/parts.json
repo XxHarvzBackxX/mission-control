@@ -1,0 +1,1172 @@
+[
+  {
+    "id": "mk1-pod",
+    "name": "Mk1 Command Pod",
+    "category": "Pods",
+    "dryMass": 0.84,
+    "wetMass": 0.84,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mk2-pod",
+    "name": "Mk2 Command Pod",
+    "category": "Pods",
+    "dryMass": 2.86,
+    "wetMass": 2.86,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mk1-3-pod",
+    "name": "Mk1-3 Command Pod",
+    "category": "Pods",
+    "dryMass": 2.88,
+    "wetMass": 2.88,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "stayputnik",
+    "name": "Stayputnik Mk. 1",
+    "category": "CommandAndControl",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "okto",
+    "name": "OKTO Probe Core",
+    "category": "CommandAndControl",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "okto2",
+    "name": "OKTO2 Probe Core",
+    "category": "CommandAndControl",
+    "dryMass": 0.04,
+    "wetMass": 0.04,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "hecs",
+    "name": "HECS Probe Core",
+    "category": "CommandAndControl",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "hecs2",
+    "name": "HECS2 Probe Core",
+    "category": "CommandAndControl",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "qbe",
+    "name": "QBE Probe Core",
+    "category": "CommandAndControl",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "rc-001s",
+    "name": "RC-001S Remote Guidance Unit",
+    "category": "CommandAndControl",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "rc-l01",
+    "name": "RC-L01 Remote Guidance Unit",
+    "category": "CommandAndControl",
+    "dryMass": 0.5,
+    "wetMass": 0.5,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "rovemate",
+    "name": "RoveMate Body",
+    "category": "CommandAndControl",
+    "dryMass": 0.15,
+    "wetMass": 0.15,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "oscar-b",
+    "name": "Oscar-B Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.035,
+    "wetMass": 0.225,
+    "fuelCapacity": { "LiquidFuelOxidizer": 48 },
+    "engineStats": null
+  },
+  {
+    "id": "fl-t100",
+    "name": "FL-T100 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.0625,
+    "wetMass": 0.5625,
+    "fuelCapacity": { "LiquidFuelOxidizer": 100 },
+    "engineStats": null
+  },
+  {
+    "id": "fl-t200",
+    "name": "FL-T200 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.125,
+    "wetMass": 1.125,
+    "fuelCapacity": { "LiquidFuelOxidizer": 200 },
+    "engineStats": null
+  },
+  {
+    "id": "fl-t400",
+    "name": "FL-T400 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.25,
+    "wetMass": 2.25,
+    "fuelCapacity": { "LiquidFuelOxidizer": 400 },
+    "engineStats": null
+  },
+  {
+    "id": "fl-t800",
+    "name": "FL-T800 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.5,
+    "wetMass": 4.5,
+    "fuelCapacity": { "LiquidFuelOxidizer": 800 },
+    "engineStats": null
+  },
+  {
+    "id": "rockomax-x200-8",
+    "name": "Rockomax X200-8 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.5,
+    "wetMass": 4.5,
+    "fuelCapacity": { "LiquidFuelOxidizer": 800 },
+    "engineStats": null
+  },
+  {
+    "id": "rockomax-x200-16",
+    "name": "Rockomax X200-16 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 1.0,
+    "wetMass": 9.0,
+    "fuelCapacity": { "LiquidFuelOxidizer": 1600 },
+    "engineStats": null
+  },
+  {
+    "id": "rockomax-x200-32",
+    "name": "Rockomax X200-32 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 2.0,
+    "wetMass": 18.0,
+    "fuelCapacity": { "LiquidFuelOxidizer": 3200 },
+    "engineStats": null
+  },
+  {
+    "id": "rockomax-jumbo-64",
+    "name": "Rockomax Jumbo-64 Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 4.0,
+    "wetMass": 36.0,
+    "fuelCapacity": { "LiquidFuelOxidizer": 6400 },
+    "engineStats": null
+  },
+  {
+    "id": "kerbodyne-s3-14400",
+    "name": "Kerbodyne S3-14400 Tank",
+    "category": "FuelTanks",
+    "dryMass": 9.0,
+    "wetMass": 81.0,
+    "fuelCapacity": { "LiquidFuelOxidizer": 14400 },
+    "engineStats": null
+  },
+  {
+    "id": "kerbodyne-s3-7200",
+    "name": "Kerbodyne S3-7200 Tank",
+    "category": "FuelTanks",
+    "dryMass": 4.5,
+    "wetMass": 40.5,
+    "fuelCapacity": { "LiquidFuelOxidizer": 7200 },
+    "engineStats": null
+  },
+  {
+    "id": "kerbodyne-s3-3600",
+    "name": "Kerbodyne S3-3600 Tank",
+    "category": "FuelTanks",
+    "dryMass": 2.25,
+    "wetMass": 20.25,
+    "fuelCapacity": { "LiquidFuelOxidizer": 3600 },
+    "engineStats": null
+  },
+  {
+    "id": "mk3-fuselage",
+    "name": "Mk3 Rocket Fuel Fuselage",
+    "category": "FuelTanks",
+    "dryMass": 2.49,
+    "wetMass": 14.29,
+    "fuelCapacity": { "LiquidFuelOxidizer": 2200 },
+    "engineStats": null
+  },
+  {
+    "id": "mk3-fuselage-short",
+    "name": "Mk3 Rocket Fuel Fuselage Short",
+    "category": "FuelTanks",
+    "dryMass": 1.3,
+    "wetMass": 7.3,
+    "fuelCapacity": { "LiquidFuelOxidizer": 1100 },
+    "engineStats": null
+  },
+  {
+    "id": "fl-r10",
+    "name": "FL-R10 RCS Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.1,
+    "wetMass": 0.6,
+    "fuelCapacity": { "MonoPropellant": 20 },
+    "engineStats": null
+  },
+  {
+    "id": "fl-r25",
+    "name": "FL-R25 RCS Fuel Tank",
+    "category": "FuelTanks",
+    "dryMass": 0.5,
+    "wetMass": 3.0,
+    "fuelCapacity": { "MonoPropellant": 100 },
+    "engineStats": null
+  },
+  {
+    "id": "pros-b3",
+    "name": "PB-X50R Xenon Container",
+    "category": "FuelTanks",
+    "dryMass": 0.025,
+    "wetMass": 0.054,
+    "fuelCapacity": { "Xenon": 405 },
+    "engineStats": null
+  },
+  {
+    "id": "pros-b4500",
+    "name": "PB-X4500 Xenon Container",
+    "category": "FuelTanks",
+    "dryMass": 0.23,
+    "wetMass": 0.645,
+    "fuelCapacity": { "Xenon": 5750 },
+    "engineStats": null
+  },
+  {
+    "id": "lv-t30",
+    "name": "LV-T30 'Reliant' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 1.25,
+    "wetMass": 1.25,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 215.0,
+      "thrustVacuum": 240.0,
+      "ispSeaLevel": 265,
+      "ispVacuum": 310,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "lv-t45",
+    "name": "LV-T45 'Swivel' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 1.5,
+    "wetMass": 1.5,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 167.97,
+      "thrustVacuum": 215.0,
+      "ispSeaLevel": 270,
+      "ispVacuum": 320,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "lv-909",
+    "name": "LV-909 'Terrier' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.5,
+    "wetMass": 0.5,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 14.78,
+      "thrustVacuum": 60.0,
+      "ispSeaLevel": 85,
+      "ispVacuum": 345,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "re-l10-poodle",
+    "name": "RE-L10 'Poodle' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 1.75,
+    "wetMass": 1.75,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 64.29,
+      "thrustVacuum": 250.0,
+      "ispSeaLevel": 90,
+      "ispVacuum": 350,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "re-i5-skipper",
+    "name": "RE-I5 'Skipper' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 3.0,
+    "wetMass": 3.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 568.75,
+      "thrustVacuum": 650.0,
+      "ispSeaLevel": 280,
+      "ispVacuum": 320,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "re-m3-mainsail",
+    "name": "RE-M3 'Mainsail' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 6.0,
+    "wetMass": 6.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 1379.03,
+      "thrustVacuum": 1500.0,
+      "ispSeaLevel": 285,
+      "ispVacuum": 310,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "ks-25-vector",
+    "name": "S3 KS-25 'Vector' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 4.0,
+    "wetMass": 4.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 936.51,
+      "thrustVacuum": 1000.0,
+      "ispSeaLevel": 295,
+      "ispVacuum": 315,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "ks-25x4-mammoth",
+    "name": "S3 KS-25x4 'Mammoth' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 15.0,
+    "wetMass": 15.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 3746.03,
+      "thrustVacuum": 4000.0,
+      "ispSeaLevel": 295,
+      "ispVacuum": 315,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "dart-aerospike",
+    "name": "T-1 Toroidal Aerospike 'Dart' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 1.0,
+    "wetMass": 1.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 153.53,
+      "thrustVacuum": 180.0,
+      "ispSeaLevel": 290,
+      "ispVacuum": 340,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "spark",
+    "name": "48-7S 'Spark' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.13,
+    "wetMass": 0.13,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 16.56,
+      "thrustVacuum": 20.0,
+      "ispSeaLevel": 265,
+      "ispVacuum": 320,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "ant",
+    "name": "LV-1 'Ant' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.02,
+    "wetMass": 0.02,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 0.51,
+      "thrustVacuum": 2.0,
+      "ispSeaLevel": 80,
+      "ispVacuum": 315,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "spider",
+    "name": "LV-1R 'Spider' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.02,
+    "wetMass": 0.02,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 1.79,
+      "thrustVacuum": 2.0,
+      "ispSeaLevel": 260,
+      "ispVacuum": 290,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "twitch",
+    "name": "24-77 'Twitch' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.09,
+    "wetMass": 0.09,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 15.17,
+      "thrustVacuum": 16.0,
+      "ispSeaLevel": 275,
+      "ispVacuum": 290,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "thud",
+    "name": "Mk-55 'Thud' Liquid Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.9,
+    "wetMass": 0.9,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 108.2,
+      "thrustVacuum": 120.0,
+      "ispSeaLevel": 275,
+      "ispVacuum": 305,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "nerv",
+    "name": "LV-N 'Nerv' Atomic Rocket Motor",
+    "category": "Engines",
+    "dryMass": 3.0,
+    "wetMass": 3.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 13.88,
+      "thrustVacuum": 60.0,
+      "ispSeaLevel": 185,
+      "ispVacuum": 800,
+      "fuelTypes": ["LiquidFuelOnly"]
+    }
+  },
+  {
+    "id": "puff",
+    "name": "O-10 'Puff' MonoPropellant Fuel Engine",
+    "category": "Engines",
+    "dryMass": 0.09,
+    "wetMass": 0.09,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 9.6,
+      "thrustVacuum": 20.0,
+      "ispSeaLevel": 120,
+      "ispVacuum": 250,
+      "fuelTypes": ["MonoPropellant"]
+    }
+  },
+  {
+    "id": "dawn",
+    "name": "IX-6315 'Dawn' Electric Propulsion System",
+    "category": "Engines",
+    "dryMass": 0.25,
+    "wetMass": 0.25,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 0.048,
+      "thrustVacuum": 2.0,
+      "ispSeaLevel": 100,
+      "ispVacuum": 4200,
+      "fuelTypes": ["Xenon"]
+    }
+  },
+  {
+    "id": "rapier",
+    "name": "CR-7 R.A.P.I.E.R. Engine",
+    "category": "Engines",
+    "dryMass": 2.0,
+    "wetMass": 2.0,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 162.3,
+      "thrustVacuum": 180.0,
+      "ispSeaLevel": 275,
+      "ispVacuum": 305,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "rt-10",
+    "name": "RT-10 'Hammer' Solid Fuel Booster",
+    "category": "Engines",
+    "dryMass": 0.75,
+    "wetMass": 3.56,
+    "fuelCapacity": { "SolidFuel": 375 },
+    "engineStats": {
+      "thrustSeaLevel": 197.9,
+      "thrustVacuum": 227.0,
+      "ispSeaLevel": 170,
+      "ispVacuum": 195,
+      "fuelTypes": ["SolidFuel"]
+    }
+  },
+  {
+    "id": "bacc-thumper",
+    "name": "BACC 'Thumper' Solid Fuel Booster",
+    "category": "Engines",
+    "dryMass": 1.5,
+    "wetMass": 7.65,
+    "fuelCapacity": { "SolidFuel": 820 },
+    "engineStats": {
+      "thrustSeaLevel": 250.0,
+      "thrustVacuum": 300.0,
+      "ispSeaLevel": 175,
+      "ispVacuum": 195,
+      "fuelTypes": ["SolidFuel"]
+    }
+  },
+  {
+    "id": "flea",
+    "name": "RT-5 'Flea' Solid Fuel Booster",
+    "category": "Engines",
+    "dryMass": 0.45,
+    "wetMass": 1.5,
+    "fuelCapacity": { "SolidFuel": 140 },
+    "engineStats": {
+      "thrustSeaLevel": 162.91,
+      "thrustVacuum": 192.0,
+      "ispSeaLevel": 140,
+      "ispVacuum": 165,
+      "fuelTypes": ["SolidFuel"]
+    }
+  },
+  {
+    "id": "kickback",
+    "name": "S1 SRB-KD25k 'Kickback' Solid Fuel Booster",
+    "category": "Engines",
+    "dryMass": 4.5,
+    "wetMass": 24.0,
+    "fuelCapacity": { "SolidFuel": 2600 },
+    "engineStats": {
+      "thrustSeaLevel": 593.86,
+      "thrustVacuum": 670.0,
+      "ispSeaLevel": 195,
+      "ispVacuum": 220,
+      "fuelTypes": ["SolidFuel"]
+    }
+  },
+  {
+    "id": "sepratron-i",
+    "name": "Sepratron I",
+    "category": "Engines",
+    "dryMass": 0.0125,
+    "wetMass": 0.0725,
+    "fuelCapacity": { "SolidFuel": 8 },
+    "engineStats": {
+      "thrustSeaLevel": 13.79,
+      "thrustVacuum": 18.0,
+      "ispSeaLevel": 118,
+      "ispVacuum": 154,
+      "fuelTypes": ["SolidFuel"]
+    }
+  },
+  {
+    "id": "td-12-decoupler",
+    "name": "TD-12 Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.04,
+    "wetMass": 0.04,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "td-18-decoupler",
+    "name": "TD-18 Stack Separator",
+    "category": "Coupling",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "td-25-decoupler",
+    "name": "TD-25 Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.04,
+    "wetMass": 0.04,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "td-37-decoupler",
+    "name": "TD-37 Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.08,
+    "wetMass": 0.08,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "rockomax-brand-decoupler",
+    "name": "Rockomax Brand Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.04,
+    "wetMass": 0.04,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "tr-2v-decoupler",
+    "name": "TR-2V Stack Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.04,
+    "wetMass": 0.04,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "tr-38-d-separator",
+    "name": "TR-38-D Stack Separator",
+    "category": "Coupling",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "tr-50a-separator",
+    "name": "TR-50A Stack Separator",
+    "category": "Coupling",
+    "dryMass": 0.06,
+    "wetMass": 0.06,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "radial-decoupler",
+    "name": "TT-70 Radial Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "small-radial-decoupler",
+    "name": "TT-38K Radial Decoupler",
+    "category": "Coupling",
+    "dryMass": 0.025,
+    "wetMass": 0.025,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "structural-fuselage",
+    "name": "Structural Fuselage",
+    "category": "Structural",
+    "dryMass": 0.15,
+    "wetMass": 0.15,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "truss-1",
+    "name": "EAS-4 Strut Connector",
+    "category": "Structural",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "i-beam-xl",
+    "name": "I-Beam (Extra Large)",
+    "category": "Structural",
+    "dryMass": 0.5,
+    "wetMass": 0.5,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "i-beam",
+    "name": "I-Beam (Large)",
+    "category": "Structural",
+    "dryMass": 0.25,
+    "wetMass": 0.25,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "i-beam-small",
+    "name": "I-Beam (Small)",
+    "category": "Structural",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mk1-fuselage-structural",
+    "name": "Mk1 Structural Fuselage",
+    "category": "Structural",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "nose-cone-a",
+    "name": "Aerodynamic Nose Cone",
+    "category": "Aerodynamics",
+    "dryMass": 0.04,
+    "wetMass": 0.04,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "nose-cone-b",
+    "name": "Advanced Nose Cone - Type B",
+    "category": "Aerodynamics",
+    "dryMass": 0.09,
+    "wetMass": 0.09,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "fairing-size1",
+    "name": "AE-FF1 Airstream Protective Shell (1.25m)",
+    "category": "Aerodynamics",
+    "dryMass": 0.07,
+    "wetMass": 0.07,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "fairing-size2",
+    "name": "AE-FF2 Airstream Protective Shell (2.5m)",
+    "category": "Aerodynamics",
+    "dryMass": 0.3,
+    "wetMass": 0.3,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "fairing-size3",
+    "name": "AE-FF3 Airstream Protective Shell (3.75m)",
+    "category": "Aerodynamics",
+    "dryMass": 0.5,
+    "wetMass": 0.5,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "delta-wing",
+    "name": "Delta Wing",
+    "category": "Aerodynamics",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "small-control-surface",
+    "name": "Small Control Surface",
+    "category": "Aerodynamics",
+    "dryMass": 0.015,
+    "wetMass": 0.015,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "basic-fin",
+    "name": "AV-R8 Winglet",
+    "category": "Aerodynamics",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "z-1k-battery",
+    "name": "Z-1k Rechargeable Battery Bank",
+    "category": "Electrical",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "z-400-battery",
+    "name": "Z-400 Rechargeable Battery",
+    "category": "Electrical",
+    "dryMass": 0.02,
+    "wetMass": 0.02,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "solar-panel-1",
+    "name": "OX-STAT Photovoltaic Panels",
+    "category": "Electrical",
+    "dryMass": 0.005,
+    "wetMass": 0.005,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "solar-panel-2",
+    "name": "SP-W 3x2 Photovoltaic Panels",
+    "category": "Electrical",
+    "dryMass": 0.03,
+    "wetMass": 0.03,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "communotron-16",
+    "name": "Communotron 16",
+    "category": "Communication",
+    "dryMass": 0.005,
+    "wetMass": 0.005,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "communotron-88-88",
+    "name": "Communotron 88-88",
+    "category": "Communication",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "hg-5",
+    "name": "HG-5 High Gain Antenna",
+    "category": "Communication",
+    "dryMass": 0.07,
+    "wetMass": 0.07,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "rcs-block",
+    "name": "RV-105 RCS Thruster Block",
+    "category": "CommandAndControl",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "reaction-wheel",
+    "name": "Advanced Inline Stabilizer",
+    "category": "CommandAndControl",
+    "dryMass": 0.2,
+    "wetMass": 0.2,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "small-reaction-wheel",
+    "name": "Small Inline Reaction Wheel",
+    "category": "CommandAndControl",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "science-jr",
+    "name": "SC-9001 Science Jr.",
+    "category": "Science",
+    "dryMass": 0.2,
+    "wetMass": 0.2,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mystery-goo",
+    "name": "Mystery Goo Containment Unit",
+    "category": "Science",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "thermometer",
+    "name": "2HOT Thermometer",
+    "category": "Science",
+    "dryMass": 0.005,
+    "wetMass": 0.005,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "seismometer",
+    "name": "GRAVMAX Negative Gravioli Detector",
+    "category": "Science",
+    "dryMass": 0.005,
+    "wetMass": 0.005,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "crew-cabin",
+    "name": "PPD-10 Hitchhiker Storage Container",
+    "category": "Payload",
+    "dryMass": 2.5,
+    "wetMass": 2.5,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "small-cargo-bay",
+    "name": "Mk3 Cargo Bay CRG-02",
+    "category": "Cargo",
+    "dryMass": 0.5,
+    "wetMass": 0.5,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "medium-cargo-bay",
+    "name": "Mk3 Cargo Bay CRG-04",
+    "category": "Cargo",
+    "dryMass": 0.75,
+    "wetMass": 0.75,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mk16-parachute",
+    "name": "Mk16 Parachute",
+    "category": "Aerodynamics",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mk16-xl-parachute",
+    "name": "Mk16-XL Parachute",
+    "category": "Aerodynamics",
+    "dryMass": 0.3,
+    "wetMass": 0.3,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "mk25-parachute",
+    "name": "Mk25 Parachute",
+    "category": "Aerodynamics",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "small-landing-leg",
+    "name": "LT-05 Micro Landing Strut",
+    "category": "Ground",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "landing-leg",
+    "name": "LT-1 Landing Struts",
+    "category": "Ground",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "landing-leg-xl",
+    "name": "LT-2 Landing Strut",
+    "category": "Ground",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "rover-wheel",
+    "name": "RoveMax Model S2",
+    "category": "Ground",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "large-rover-wheel",
+    "name": "RoveMax Model XL3",
+    "category": "Ground",
+    "dryMass": 0.3,
+    "wetMass": 0.3,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "heat-shield-625",
+    "name": "Heat Shield (0.625m)",
+    "category": "Thermal",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "heat-shield-125",
+    "name": "Heat Shield (1.25m)",
+    "category": "Thermal",
+    "dryMass": 0.2,
+    "wetMass": 0.2,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "heat-shield-25",
+    "name": "Heat Shield (2.5m)",
+    "category": "Thermal",
+    "dryMass": 0.4,
+    "wetMass": 0.4,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "clamp-o-tron",
+    "name": "Clamp-O-Tron Docking Port",
+    "category": "Coupling",
+    "dryMass": 0.05,
+    "wetMass": 0.05,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "clamp-o-tron-sr",
+    "name": "Clamp-O-Tron Docking Port Sr.",
+    "category": "Coupling",
+    "dryMass": 0.2,
+    "wetMass": 0.2,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "clamp-o-tron-jr",
+    "name": "Clamp-O-Tron Docking Port Jr.",
+    "category": "Coupling",
+    "dryMass": 0.02,
+    "wetMass": 0.02,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "stack-bi-coupler",
+    "name": "TVR-400L Stack Quad-Coupler",
+    "category": "Structural",
+    "dryMass": 0.4,
+    "wetMass": 0.4,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "stack-tri-coupler",
+    "name": "TVR-200L Stack Bi-Coupler",
+    "category": "Structural",
+    "dryMass": 0.15,
+    "wetMass": 0.15,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "probodobodyne-cores",
+    "name": "Probodobodyne OKTO",
+    "category": "CommandAndControl",
+    "dryMass": 0.1,
+    "wetMass": 0.1,
+    "fuelCapacity": null,
+    "engineStats": null
+  },
+  {
+    "id": "lv-t30-dual",
+    "name": "LV-T30 'Reliant' Liquid Fuel Engine (Radial)",
+    "category": "Engines",
+    "dryMass": 1.25,
+    "wetMass": 1.25,
+    "fuelCapacity": null,
+    "engineStats": {
+      "thrustSeaLevel": 215.0,
+      "thrustVacuum": 240.0,
+      "ispSeaLevel": 265,
+      "ispVacuum": 310,
+      "fuelTypes": ["LiquidFuelOxidizer"]
+    }
+  },
+  {
+    "id": "mk1-lf-fuselage",
+    "name": "Mk1 Liquid Fuel Fuselage",
+    "category": "FuelTanks",
+    "dryMass": 0.25,
+    "wetMass": 2.25,
+    "fuelCapacity": { "LiquidFuelOnly": 400 },
+    "engineStats": null
+  },
+  {
+    "id": "mk1-lf-fuselage-short",
+    "name": "Mk1 Liquid Fuel Fuselage Short",
+    "category": "FuelTanks",
+    "dryMass": 0.125,
+    "wetMass": 1.125,
+    "fuelCapacity": { "LiquidFuelOnly": 200 },
+    "engineStats": null
+  }
+]

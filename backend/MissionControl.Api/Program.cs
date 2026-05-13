@@ -15,6 +15,18 @@ builder.Services.Configure<JsonStorageOptions>(
     builder.Configuration.GetSection("JsonStorage"));
 builder.Services.AddSingleton<IMissionRepository, JsonMissionRepository>();
 
+builder.Services.Configure<JsonRocketStorageOptions>(
+    builder.Configuration.GetSection("RocketStorage"));
+builder.Services.AddSingleton<IRocketRepository, JsonRocketRepository>();
+
+builder.Services.Configure<JsonPartCatalogueStorageOptions>(
+    builder.Configuration.GetSection("PartCatalogueStorage"));
+builder.Services.AddSingleton<IPartCatalogueRepository, JsonPartCatalogueRepository>();
+
+builder.Services.Configure<JsonCelestialBodyStorageOptions>(
+    builder.Configuration.GetSection("CelestialBodyStorage"));
+builder.Services.AddSingleton<ICelestialBodyRepository, JsonCelestialBodyRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

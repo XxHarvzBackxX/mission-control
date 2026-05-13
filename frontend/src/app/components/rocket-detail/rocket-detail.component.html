@@ -1,0 +1,102 @@
+<div class="detail-container">
+  <div *ngIf="loading" class="loading-msg">Loading...</div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <ng-container *ngIf="rocket && !loading">
+    <div class="detail-header">
+      <div>
+        <h2>{{ rocket.name }}</h2>
+        <p class="description">{{ rocket.description }}</p>
+      </div>
+      <div class="header-actions">
+        <a [routerLink]="['/rockets', rocket.id, 'edit']" class="btn btn-secondary">Edit</a>
+        <button (click)="delete()" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+
+    <!-- Rocket metadata -->
+    <div class="meta-row">
+      <span *ngIf="rocket.usesAsparagusStaging" class="badge asparagus">
+        Asparagus Staging ({{ formatPercent(rocket.asparagusEfficiencyBonus) }} bonus)
+      </span>
+      <span *ngIf="rocket.notes" class="notes">{{ rocket.notes }}</span>
+    </div>
+
+    <!-- Total delta-v summary -->
+    <div *ngIf="rocket.deltaVBreakdown" class="dv-summary" [ngClass]="{ 'invalid': !rocket.deltaVBreakdown.isValid }">
+      <div class="dv-total">
+        <span class="label">Estimated Δv (LKO reference)</span>
+        <span class="value">
+          {{ rocket.deltaVBreakdown.isValid ? formatDeltaV(rocket.deltaVBreakdown.totalEffectiveDeltaV) : 'N/A (invalid configuration)' }}
+        </span>
+      </div>
+
+      <!-- Rocket-level warnings -->
+      <div *ngIf="rocket.deltaVBreakdown.warnings.length > 0" class="warnings">
+        <div *ngFor="let w of rocket.deltaVBreakdown.warnings"
+             class="warning-chip"
+             [ngClass]="{ 'blocking': w.isBlocking }">
+          {{ w.message }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-stage breakdown -->
+    <h3>Stage Breakdown</h3>
+    <p class="stage-note">Stage 1 = payload (fires last); highest number = launch stage (fires first).</p>
+
+    <div *ngFor="let stage of rocket.stages" class="stage-card">
+      <!-- Stage header (from DV result if available) -->
+      <ng-container *ngIf="rocket.deltaVBreakdown as dv">
+        <ng-container *ngFor="let stageResult of dv.stages">
+          <div *ngIf="stageResult.stageNumber === stage.stageNumber">
+            <div class="stage-header" (click)="toggleStage(stage.stageNumber)">
+              <div class="stage-title">
+                <span class="stage-number">Stage {{ stage.stageNumber }}</span>
+                <span class="stage-name">{{ stage.name }}</span>
+                <span *ngIf="stage.isJettisoned" class="badge jettisoned">Jettisoned</span>
+              </div>
+              <div class="stage-dv">
+                <span>Δv: {{ formatDeltaV(stageResult.effectiveDeltaV) }}</span>
+                <span class="expand-icon">{{ isStageExpanded(stage.stageNumber) ? '▲' : '▼' }}</span>
+              </div>
+            </div>
+
+            <div *ngIf="isStageExpanded(stage.stageNumber)" class="stage-details">
+              <table class="stage-table">
+                <tbody>
+                  <tr><th>Wet Mass</th><td>{{ formatMass(stageResult.wetMass) }}</td></tr>
+                  <tr><th>Dry Mass</th><td>{{ formatMass(stageResult.dryMass) }}</td></tr>
+                  <tr><th>Isp Used</th><td>{{ stageResult.ispUsed.toFixed(1) }} s</td></tr>
+                  <tr><th>Efficiency Factor</th><td>{{ formatPercent(stageResult.efficiencyFactor) }}</td></tr>
+                  <tr *ngIf="stageResult.asparagusBonus > 0">
+                    <th>Asparagus Bonus</th><td>{{ formatPercent(stageResult.asparagusBonus) }}</td>
+                  </tr>
+                  <tr><th>Raw Δv</th><td>{{ formatDeltaV(stageResult.rawDeltaV) }}</td></tr>
+                  <tr><th>Effective Δv</th><td>{{ formatDeltaV(stageResult.effectiveDeltaV) }}</td></tr>
+                </tbody>
+              </table>
+
+              <!-- Stage warnings -->
+              <div *ngIf="stageResult.warnings.length > 0" class="warnings">
+                <div *ngFor="let w of stageResult.warnings"
+                     class="warning-chip"
+                     [ngClass]="{ 'blocking': w.isBlocking }">
+                  {{ w.message }}
+                </div>
+              </div>
+
+              <!-- Parts list -->
+              <div class="parts-list">
+                <strong>Parts:</strong>
+                <span *ngFor="let p of stage.parts" class="part-chip">
+                  {{ p.partId }} × {{ p.quantity }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

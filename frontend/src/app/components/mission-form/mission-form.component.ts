@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MissionService } from '../../services/mission.service';
+import { RocketsService } from '../../services/rockets.service';
 import { KerbinTimeInputComponent } from '../shared/kerbin-time-input/kerbin-time-input.component';
 import {
   MissionControlMode,
@@ -10,6 +11,7 @@ import {
   ReferenceData,
   MissionSummary,
 } from '../../models/mission.model';
+import { RocketListItem } from '../../models/rocket.model';
 
 @Component({
   selector: 'app-mission-form',
@@ -35,8 +37,10 @@ export class MissionFormComponent implements OnInit {
   probeCoreIsCustom = false;
   startMissionTime: number | null = null;
   endMissionTime: number | null = null;
+  assignedRocketId: string | null = null;
 
   customTargetBody = '';
+  rockets: RocketListItem[] = [];
   customMissionType = '';
   customProbeCore = '';
 
@@ -46,6 +50,7 @@ export class MissionFormComponent implements OnInit {
 
   constructor(
     private missionService: MissionService,
+    private rocketsService: RocketsService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -54,6 +59,7 @@ export class MissionFormComponent implements OnInit {
     this.missionService.getReferenceData().subscribe(data => {
       this.referenceData = data;
     });
+    this.rocketsService.getAll().subscribe(rockets => { this.rockets = rockets; });
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -97,6 +103,7 @@ export class MissionFormComponent implements OnInit {
     }
     this.startMissionTime = m.startMissionTime;
     this.endMissionTime = m.endMissionTime;
+    this.assignedRocketId = m.assignedRocketId;
   }
 
   onTargetBodyChange(): void {
@@ -147,7 +154,9 @@ export class MissionFormComponent implements OnInit {
         : null,
       probeCoreIsCustom: this.controlMode === 'Probe' ? this.probeCoreIsCustom : false,
       startMissionTime: this.startMissionTime,
-      endMissionTime: this.endMissionTime
+      endMissionTime: this.endMissionTime,
+      assignedRocketId: this.assignedRocketId,
+      calculationProfile: null
     };
 
     const obs = this.isEditMode

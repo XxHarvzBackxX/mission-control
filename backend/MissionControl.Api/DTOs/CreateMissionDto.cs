@@ -15,6 +15,10 @@ public class CreateMissionDto
     public bool ProbeCoreIsCustom { get; set; }
     public long? StartMissionTime { get; set; }
     public long? EndMissionTime { get; set; }
+
+    // Rocket assignment (US2)
+    public Guid? AssignedRocketId { get; set; }
+    public MissionCalculationProfileDto? CalculationProfile { get; set; }
 }
 
 public class UpdateMissionDto : CreateMissionDto { }

@@ -16,6 +16,7 @@
 - Q: What is the stage numbering and display convention in the builder? → A: KSP convention — Stage 1 is the final/payload stage (last to fire); the launch stage carries the highest stage number. The UI displays stages in reverse firing order with Stage 1 at the top.
 - Q: What readiness state applies when available delta-v exactly equals required delta-v? → A: Not Ready — zero margin is treated as insufficient since no real manoeuvre can be executed perfectly.
 - Q: Are mission calculation profile settings stored inline per mission or reusable across missions? → A: Inline per mission only in v1. Named reusable profiles are deferred to v2.
+- Q: Should the asparagus staging approximation apply at rocket level or per stage, and which delta-v segments does it affect? → A: Rocket level. The multiplier applies only to the atmospheric ascent delta-v segment; transfer burns, circularisation, and vacuum burns are unaffected. Full asparagus staging simulation (crossfeed physics) remains deferred to v2.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -134,6 +135,8 @@ A mission planner selects "Other" as the launch or target body and enters custom
 - Rocket has a single stage with no decoupler (no staging, entire rocket is payload + propulsion).
 - User selects "Other" as launch body but leaves atmosphere pressure blank.
 - Available and required delta-v are exactly equal → treated as Not Ready; zero margin is insufficient since no real manoeuvre can be executed perfectly.
+- Asparagus checkbox is enabled but the selected launch body has no atmosphere → bonus is suppressed silently and a clarifying note is shown to the user.
+- Asparagus slider is set to 0% while checkbox is checked → bonus of 0% is applied; functionally equivalent to disabled but the warning still fires to make the setting visible.
 
 ## Requirements *(mandatory)*
 
@@ -208,6 +211,7 @@ A mission planner selects "Other" as the launch or target body and enters custom
   - **Mixed Fuel Uncertainty**: A stage contains engines and fuels that cannot be confidently matched.
   - **Custom Body Approximation**: Custom body data is user-entered and unverified.
   - **Manual Override Applied**: User has replaced the system required delta-v estimate with their own value.
+  - **Asparagus Approximation Applied**: An asparagus efficiency bonus has been applied to the atmospheric ascent delta-v; this is a planning estimate, not a physics simulation.
 
 #### Staging Model
 
@@ -220,9 +224,24 @@ A mission planner selects "Other" as the launch or target body and enters custom
   - **Full Return**: surface landing delta-v + ascent from target surface + return transfer + re-entry at the launch body.
   Users MUST be able to select the mission profile type per mission. When no selection is made, Orbit Insertion MUST be used as the default.
 
+- **FR-039**: Each rocket MUST expose an asparagus staging approximation control comprising:
+  - A checkbox: **"Uses asparagus staging?"** (default: unchecked/off).
+  - When checked, a slider from **0% to 20%** representing the estimated delta-v bonus gained from crossfeed efficiency during atmospheric ascent. The slider MUST be hard-capped at 20%; values above this cap are not permitted in v1.
+  - The slider MUST display reference labels at the following positions to guide user judgement:
+    - **0%** — No bonus (asparagus checkbox unchecked hides the slider)
+    - **~8%** — Conservative
+    - **~12%** — Moderate
+    - **~15%** — Optimistic
+    - **20%** — Aggressive (Maximum)
+  - The default slider position when the checkbox is first checked MUST be **8% (Conservative)**.
+  - The asparagus bonus MUST be applied only to the **atmospheric ascent segment** of the rocket's available delta-v. Transfer burns, circularisation manoeuvres, and vacuum segments MUST NOT be affected.
+  - If the selected launch body has no atmosphere, the asparagus checkbox MUST be disabled and the bonus MUST NOT be applied regardless of the slider value.
+  - The asparagus control MUST be clearly labelled as an estimation aid, not a physics simulation. Small explanatory text MUST accompany the slider stating that this approximates crossfeed staging efficiency and is not calculated from rocket geometry.
+  - Enabling the asparagus bonus MUST trigger the **Asparagus Approximation Applied** warning in the rocket summary and any mission using the rocket.
+
 ### Key Entities
 
-- **Rocket**: A reusable launch vehicle with a unique name, description, ordered list of stages, and optional notes. Assignable to multiple missions.
+- **Rocket**: A reusable launch vehicle with a unique name, description, ordered list of stages, optional notes, and an asparagus staging approximation setting (enabled flag + 0–20% bonus percentage). Assignable to multiple missions.
 - **Stage**: One section of a rocket with an ordered list of parts, a stage number, and a flag indicating whether it is jettisoned after its burn.
 - **Part**: A catalogue item representing a KSP-style craft component. Has a category, dry mass, wet mass where applicable, and fuel/resource capacity where applicable. Engine parts additionally carry thrust and Isp at sea level and in vacuum.
 - **Celestial Body**: A stock or custom planetary body with surface gravity, equatorial radius, atmosphere properties, sphere of influence, and a flag indicating whether it is user-entered.
@@ -257,7 +276,7 @@ A mission planner selects "Other" as the launch or target body and enters custom
 
 - Stock KSP celestial body data (Kerbol System) will be seeded from the provided KSP wiki HTML exports; no runtime HTML parsing is required.
 - The part catalogue will be seeded with **all stock KSP base-game parts** (~368 parts as of KSP 1.12.5), sourced from the KSP wiki HTML exports (`Parts - Kerbal Space Program Wiki.html`) provided with this specification. The HTML must be transformed into application seed data during the implementation phase; no runtime HTML parsing is required. DLC parts (Breaking Ground, Making History) are excluded from v1.
-- Asparagus/crossfeed staging is out of scope for v1; all staging is sequential (see FR-037). The data model must accommodate parallel staging as a planned v2 extension.
+- Full asparagus/crossfeed staging simulation (modelling parallel stage mass flow and fuel crossfeed physics) remains out of scope for v1 (see FR-037). A lightweight approximation control (checkbox + 0–20% atmospheric ascent bonus slider) is in scope as a planning estimation aid (see FR-039). The data model must accommodate full parallel staging as a planned v2 extension.
 - Centre-of-mass and centre-of-drag are assumed stable; the system does not calculate or validate aerodynamic stability.
 - The system does not simulate real-time flight, exact aerodynamics, or patched-conic trajectories.
 - Users cannot create or modify catalogue parts in v1; the catalogue is seeded and read-only.

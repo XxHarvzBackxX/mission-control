@@ -118,6 +118,21 @@ public class JsonMissionRepository : IMissionRepository
 
     private static Mission Reconstitute(MissionRecord r)
     {
+        MissionCalculationProfile? profile = null;
+        if (r.CalculationProfileLaunchBodyId != null && r.CalculationProfileTargetBodyId != null &&
+            r.CalculationProfileType != null &&
+            Enum.TryParse<MissionProfileType>(r.CalculationProfileType, out var profileType))
+        {
+            profile = new MissionCalculationProfile(
+                r.CalculationProfileLaunchBodyId,
+                r.CalculationProfileTargetBodyId,
+                profileType,
+                r.CalculationProfileOrbitAltitude ?? 80_000,
+                r.CalculationProfileEfficiencyMultiplier ?? 0.85,
+                r.CalculationProfileSafetyMargin ?? 10.0,
+                r.CalculationProfileDvOverride);
+        }
+
         return Mission.Reconstitute(
             r.Id,
             r.Name,
@@ -129,7 +144,10 @@ public class JsonMissionRepository : IMissionRepository
             r.CrewMembers,
             r.ProbeCore != null ? new KspBodyValue(r.ProbeCore.Value, r.ProbeCore.IsCustom) : null,
             r.StartMissionTime.HasValue ? new KerbinTime(r.StartMissionTime.Value) : null,
-            r.EndMissionTime.HasValue ? new KerbinTime(r.EndMissionTime.Value) : null);
+            r.EndMissionTime.HasValue ? new KerbinTime(r.EndMissionTime.Value) : null,
+            r.AssignedRocketId,
+            r.RocketName,
+            profile);
     }
 
     private static MissionRecord ToRecord(Mission m)
@@ -148,7 +166,16 @@ public class JsonMissionRepository : IMissionRepository
                 ? new KspBodyRecord { Value = m.ProbeCore.Value, IsCustom = m.ProbeCore.IsCustom }
                 : null,
             StartMissionTime = m.StartMissionTime?.TotalSeconds,
-            EndMissionTime = m.EndMissionTime?.TotalSeconds
+            EndMissionTime = m.EndMissionTime?.TotalSeconds,
+            AssignedRocketId = m.AssignedRocketId,
+            RocketName = m.RocketName,
+            CalculationProfileLaunchBodyId = m.CalculationProfile?.LaunchBodyId,
+            CalculationProfileTargetBodyId = m.CalculationProfile?.TargetBodyId,
+            CalculationProfileType = m.CalculationProfile?.ProfileType.ToString(),
+            CalculationProfileOrbitAltitude = m.CalculationProfile?.TargetOrbitAltitude,
+            CalculationProfileEfficiencyMultiplier = m.CalculationProfile?.AtmosphericEfficiencyMultiplier,
+            CalculationProfileSafetyMargin = m.CalculationProfile?.SafetyMarginPercent,
+            CalculationProfileDvOverride = m.CalculationProfile?.RequiredDeltaVOverride
         };
     }
 
@@ -165,6 +192,17 @@ public class JsonMissionRepository : IMissionRepository
         public KspBodyRecord? ProbeCore { get; set; }
         public long? StartMissionTime { get; set; }
         public long? EndMissionTime { get; set; }
+
+        // Rocket assignment fields
+        public Guid? AssignedRocketId { get; set; }
+        public string? RocketName { get; set; }
+        public string? CalculationProfileLaunchBodyId { get; set; }
+        public string? CalculationProfileTargetBodyId { get; set; }
+        public string? CalculationProfileType { get; set; }
+        public double? CalculationProfileOrbitAltitude { get; set; }
+        public double? CalculationProfileEfficiencyMultiplier { get; set; }
+        public double? CalculationProfileSafetyMargin { get; set; }
+        public double? CalculationProfileDvOverride { get; set; }
     }
 
     private class KspBodyRecord

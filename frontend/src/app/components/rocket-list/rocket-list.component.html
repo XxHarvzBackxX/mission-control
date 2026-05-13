@@ -1,0 +1,37 @@
+<div class="list-container">
+  <div class="list-header">
+    <h2>Rocket Library</h2>
+    <a routerLink="/rockets/new" class="btn btn-primary">+ New Rocket</a>
+  </div>
+
+  <div *ngIf="loading" class="loading-msg">Loading...</div>
+
+  <div *ngIf="!loading && rockets.length === 0" class="empty-msg">
+    <p>No rockets yet. Build your first rocket to get started!</p>
+  </div>
+
+  <table *ngIf="!loading && rockets.length > 0" class="rockets-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Stages</th>
+        <th>Asparagus</th>
+        <th>Est. Δv (Kerbin)</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rocket of rockets">
+        <td><a class="rocket-link" [routerLink]="['/rockets', rocket.id]">{{ rocket.name }}</a></td>
+        <td>{{ rocket.stageCount }}</td>
+        <td>{{ rocket.usesAsparagusStaging ? 'Yes' : 'No' }}</td>
+        <td>{{ formatDeltaV(rocket.totalEffectiveDeltaV) }}</td>
+        <td>
+          <span *ngIf="rocket.isValid && !rocket.hasWarnings" class="status-badge valid">OK</span>
+          <span *ngIf="rocket.isValid && rocket.hasWarnings" class="status-badge warn">Warnings</span>
+          <span *ngIf="!rocket.isValid" class="status-badge error">Invalid</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

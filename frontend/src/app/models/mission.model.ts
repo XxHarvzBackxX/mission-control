@@ -22,6 +22,28 @@ export interface MissionListItem {
   crewSummary: string | null;
   probeCoreValue: string | null;
   warnings: Warning[];
+  assignedRocketId: string | null;
+  rocketName: string | null;
+}
+
+export interface MissionCalculationProfileDto {
+  launchBodyId: string;
+  targetBodyId: string;
+  profileType: string;
+  targetOrbitAltitude: number;
+  atmosphericEfficiencyMultiplier: number;
+  safetyMarginPercent: number;
+  requiredDeltaVOverride: number | null;
+}
+
+export interface RequiredDeltaVBreakdown {
+  totalRequiredDeltaV: number;
+  ascentDeltaV: number;
+  transferDeltaV: number;
+  descentDeltaV: number;
+  returnDeltaV: number;
+  estimationMethod: string;
+  isApproximated: boolean;
 }
 
 export interface MissionSummary {
@@ -42,6 +64,10 @@ export interface MissionSummary {
   startMissionTime: number | null;
   endMissionTime: number | null;
   warnings: Warning[];
+  assignedRocketId: string | null;
+  rocketName: string | null;
+  calculationProfile: MissionCalculationProfileDto | null;
+  requiredDeltaVBreakdown: RequiredDeltaVBreakdown | null;
 }
 
 export interface CreateMissionRequest {
@@ -58,6 +84,8 @@ export interface CreateMissionRequest {
   probeCoreIsCustom: boolean;
   startMissionTime: number | null;
   endMissionTime: number | null;
+  assignedRocketId: string | null;
+  calculationProfile: MissionCalculationProfileDto | null;
 }
 
 export type UpdateMissionRequest = CreateMissionRequest;

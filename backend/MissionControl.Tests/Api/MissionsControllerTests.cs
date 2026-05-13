@@ -49,7 +49,11 @@ public class MissionsControllerTests
     public void SetUp()
     {
         _repo = Substitute.For<IMissionRepository>();
-        _controller = new MissionsController(_repo);
+        var rocketRepo = Substitute.For<IRocketRepository>();
+        var partsRepo = Substitute.For<IPartCatalogueRepository>();
+        var bodiesRepo = Substitute.For<ICelestialBodyRepository>();
+        bodiesRepo.GetByIdAsync(Arg.Any<string>()).Returns((CelestialBody?)null);
+        _controller = new MissionsController(_repo, rocketRepo, partsRepo, bodiesRepo);
     }
 
     // --- POST ---
