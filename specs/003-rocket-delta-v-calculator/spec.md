@@ -8,6 +8,15 @@
 
 **Input**: User description: "Expand Mission Control from a manual readiness checker into a practical KSP-inspired mission calculator. Users should be able to define reusable rockets, build those rockets from stages and stock KSP-style parts, assign a rocket to a mission, and calculate whether that rocket has enough estimated delta-v to complete the planned mission."
 
+## Clarifications
+
+### Session 2026-05-13
+
+- Q: What is the required delta-v calculation endpoint — what does "completing the mission" mean? → A: User selects a mission profile type per mission; options are Orbit Insertion (default), Ascent Only, Surface Landing, and Full Return. The system estimates required delta-v accordingly.
+- Q: What is the stage numbering and display convention in the builder? → A: KSP convention — Stage 1 is the final/payload stage (last to fire); the launch stage carries the highest stage number. The UI displays stages in reverse firing order with Stage 1 at the top.
+- Q: What readiness state applies when available delta-v exactly equals required delta-v? → A: Not Ready — zero margin is treated as insufficient since no real manoeuvre can be executed perfectly.
+- Q: Are mission calculation profile settings stored inline per mission or reusable across missions? → A: Inline per mission only in v1. Named reusable profiles are deferred to v2.
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
@@ -124,7 +133,7 @@ A mission planner selects "Other" as the launch or target body and enters custom
 - Safety margin is set to 0%.
 - Rocket has a single stage with no decoupler (no staging, entire rocket is payload + propulsion).
 - User selects "Other" as launch body but leaves atmosphere pressure blank.
-- Available and required delta-v are exactly equal (boundary: Not Ready or At Risk?).
+- Available and required delta-v are exactly equal → treated as Not Ready; zero margin is insufficient since no real manoeuvre can be executed perfectly.
 
 ## Requirements *(mandatory)*
 
@@ -165,7 +174,7 @@ A mission planner selects "Other" as the launch or target body and enters custom
 
 #### Required Delta-V Estimation
 
-- **FR-022**: The system MUST estimate required mission delta-v based on the selected launch body and target destination.
+- **FR-022**: The system MUST estimate required mission delta-v based on the selected launch body, target destination, and mission profile type.
 - **FR-023**: Required delta-v estimation MUST account for launch body surface gravity and atmosphere presence.
 - **FR-024**: The system MUST clearly label each required delta-v figure as: calculated (formula-derived), approximated (reference data), or overridden (user-entered).
 - **FR-025**: Users MUST be able to manually override the required delta-v estimate with their own value.
@@ -202,7 +211,14 @@ A mission planner selects "Other" as the launch or target body and enters custom
 
 #### Staging Model
 
-- **FR-037**: v1 MUST support sequential staging only: each stage fires independently in sequence, and a stage's dry mass is calculated after all previously discarded stages have been jettisoned. Asparagus and parallel staging (simultaneous stage firing with crossfeed fuel lines) are explicitly deferred to v2. The data model MUST be designed to accommodate parallel staging as a future extension without requiring a schema migration; this constraint MUST be documented in the planning phase.
+- **FR-037**: v1 MUST support sequential staging only: each stage fires independently in sequence, and a stage's dry mass is calculated after all previously discarded stages have been jettisoned. Asparagus and parallel staging (simultaneous stage firing with crossfeed fuel lines) are explicitly deferred to v2. The data model MUST be designed to accommodate parallel staging as a future extension without requiring a schema migration; this constraint MUST be documented in the planning phase. Stage numbering follows KSP convention: Stage 1 is the final/payload stage (last to fire); the launch stage carries the highest stage number. The UI MUST display stages in reverse firing order with Stage 1 at the top. Delta-v is calculated from the highest-numbered stage downward to Stage 1.
+
+- **FR-038**: Required delta-v estimation MUST support a configurable mission profile type per mission with the following options:
+  - **Orbit Insertion** (default): ascent to orbit from launch body surface + Hohmann transfer + insertion into target orbit.
+  - **Ascent Only**: ascent to orbit from the launch body surface; no transfer delta-v is calculated.
+  - **Surface Landing**: orbit insertion delta-v + estimated powered descent to the target surface.
+  - **Full Return**: surface landing delta-v + ascent from target surface + return transfer + re-entry at the launch body.
+  Users MUST be able to select the mission profile type per mission. When no selection is made, Orbit Insertion MUST be used as the default.
 
 ### Key Entities
 
@@ -210,7 +226,7 @@ A mission planner selects "Other" as the launch or target body and enters custom
 - **Stage**: One section of a rocket with an ordered list of parts, a stage number, and a flag indicating whether it is jettisoned after its burn.
 - **Part**: A catalogue item representing a KSP-style craft component. Has a category, dry mass, wet mass where applicable, and fuel/resource capacity where applicable. Engine parts additionally carry thrust and Isp at sea level and in vacuum.
 - **Celestial Body**: A stock or custom planetary body with surface gravity, equatorial radius, atmosphere properties, sphere of influence, and a flag indicating whether it is user-entered.
-- **Mission Calculation Profile**: Per-mission settings for a delta-v estimate — selected launch body, target body, launch altitude assumption, target orbit altitude, atmospheric efficiency multiplier, and safety margin percentage.
+- **Mission Calculation Profile**: Per-mission settings for a delta-v estimate — selected launch body, target body, mission profile type (Orbit Insertion / Ascent Only / Surface Landing / Full Return; default: Orbit Insertion), launch altitude assumption, target orbit altitude, atmospheric efficiency multiplier, and safety margin percentage. Settings are stored inline on the mission; named reusable profiles are out of scope for v1 (deferred to v2).
 
 ### Validation Rules
 
