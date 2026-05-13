@@ -1,0 +1,48 @@
+@use '../../../tokens' as t;
+
+.warning-badge {
+  display: flex;
+  align-items: flex-start;
+  gap: t.$space-2;
+  padding: t.$space-2 t.$space-3;
+  border-radius: t.$border-radius-sm;
+  border-left-width: t.$readiness-strip-width;
+  border-left-style: solid;
+  border-top: t.$border-width solid transparent;
+  border-right: t.$border-width solid transparent;
+  border-bottom: t.$border-width solid transparent;
+  font-size: t.$font-size-sm;
+  font-weight: t.$font-weight-medium;
+
+  &.blocking {
+    background: rgba(t.$color-accent-red, 0.08);
+    border-left-color: t.$color-accent-red;
+    border-top-color: rgba(t.$color-accent-red, 0.2);
+    border-right-color: rgba(t.$color-accent-red, 0.2);
+    border-bottom-color: rgba(t.$color-accent-red, 0.2);
+    color: t.$color-accent-red;
+  }
+
+  &.advisory {
+    background: rgba(t.$color-accent-amber, 0.08);
+    border-left-color: t.$color-accent-amber;
+    border-top-color: rgba(t.$color-accent-amber, 0.2);
+    border-right-color: rgba(t.$color-accent-amber, 0.2);
+    border-bottom-color: rgba(t.$color-accent-amber, 0.2);
+    color: t.$color-accent-amber;
+  }
+}
+
+.warning-type {
+  font-weight: t.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.warning-text {
+  flex: 1;
+  line-height: t.$line-height-base;
+  color: t.$color-text-primary;
+}

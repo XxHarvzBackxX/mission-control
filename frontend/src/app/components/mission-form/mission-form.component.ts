@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MissionService } from '../../services/mission.service';
+import { KerbinTimeInputComponent } from '../shared/kerbin-time-input/kerbin-time-input.component';
 import {
   MissionControlMode,
   CreateMissionRequest,
@@ -13,27 +14,9 @@ import {
 @Component({
   selector: 'app-mission-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, KerbinTimeInputComponent],
   templateUrl: './mission-form.component.html',
-  styles: [`
-    .form-container { max-width: 700px; margin: 0 auto; padding: 20px; }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; font-weight: 600; margin-bottom: 4px; }
-    input, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-    .crew-list { margin-top: 8px; }
-    .crew-item { display: flex; gap: 8px; margin-bottom: 4px; align-items: center; }
-    .crew-item input { flex: 1; }
-    .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
-    .btn-primary { background: #2563eb; color: white; }
-    .btn-primary:hover { background: #1d4ed8; }
-    .btn-secondary { background: #e5e7eb; color: #374151; }
-    .btn-danger { background: #ef4444; color: white; }
-    .btn-small { padding: 4px 10px; font-size: 0.8rem; }
-    .error-msg { color: #991b1b; background: #fee2e2; padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; }
-    .mode-toggle { display: flex; gap: 12px; margin-top: 4px; }
-    .hidden { display: none; }
-    h2 { margin-bottom: 20px; }
-  `]
+  styleUrl: './mission-form.component.scss',
 })
 export class MissionFormComponent implements OnInit {
   isEditMode = false;

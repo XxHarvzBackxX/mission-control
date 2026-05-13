@@ -1,0 +1,91 @@
+@use '../../../tokens' as t;
+
+.kerbin-time-fieldset {
+  border: t.$border-width solid t.$color-input-border;
+  border-radius: t.$border-radius-sm;
+  padding: t.$space-3;
+  background: t.$color-input-bg;
+}
+
+.kerbin-time-label {
+  font-size: t.$font-size-sm;
+  font-weight: t.$font-weight-bold;
+  color: t.$color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 t.$space-1;
+}
+
+.kerbin-time-fields {
+  display: flex;
+  gap: t.$space-3;
+  flex-wrap: wrap;
+  margin-top: t.$space-2;
+}
+
+.time-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: t.$space-1;
+  flex: 1;
+  min-width: 48px;
+}
+
+.time-input {
+  width: 100%;
+  padding: t.$space-2;
+  text-align: center;
+  background: t.$color-bg-base;
+  border: t.$border-width solid t.$color-input-border;
+  border-radius: t.$border-radius-sm;
+  color: t.$color-input-text;
+  font-family: t.$font-family-base;
+  font-size: t.$font-size-base;
+  font-variant-numeric: tabular-nums;
+  transition: border-color 0.15s ease;
+
+  // Hide number spinners
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+
+  &::placeholder {
+    color: t.$color-input-placeholder;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: t.$color-input-focus-border;
+  }
+}
+
+.time-sub-label {
+  font-size: t.$font-size-sm;
+  font-weight: t.$font-weight-bold;
+  color: t.$color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.kerbin-time-hint {
+  font-size: t.$font-size-sm;
+  color: t.$color-text-muted;
+  margin-top: t.$space-2;
+  line-height: t.$line-height-base;
+}
+
+@media (max-width: 480px) {
+  .kerbin-time-fields {
+    gap: t.$space-2;
+  }
+
+  .time-input {
+    padding: t.$space-1;
+    font-size: t.$font-size-sm;
+  }
+}

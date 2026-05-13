@@ -17,7 +17,7 @@
         <option value="Other">Other (custom)</option>
       </select>
       <input *ngIf="targetBodyIsCustom" type="text" [(ngModel)]="customTargetBody" name="customTargetBody"
-             placeholder="Enter custom body name" style="margin-top: 4px" />
+             placeholder="Enter custom body name" />
     </div>
 
     <div class="form-group" *ngIf="referenceData">
@@ -28,7 +28,7 @@
         <option value="Other">Other (custom)</option>
       </select>
       <input *ngIf="missionTypeIsCustom" type="text" [(ngModel)]="customMissionType" name="customMissionType"
-             placeholder="Enter custom mission type" style="margin-top: 4px" />
+             placeholder="Enter custom mission type" />
     </div>
 
     <div class="form-group">
@@ -71,20 +71,26 @@
         <option value="Other">Other (custom)</option>
       </select>
       <input *ngIf="probeCoreIsCustom" type="text" [(ngModel)]="customProbeCore" name="customProbeCore"
-             placeholder="Enter custom probe core name" style="margin-top: 4px" />
+             placeholder="Enter custom probe core name" />
     </div>
 
     <div class="form-group">
-      <label for="startTime">Start Mission Time (Kerbin seconds, optional)</label>
-      <input id="startTime" type="number" [(ngModel)]="startMissionTime" name="startTime" min="0" step="1" />
+      <app-kerbin-time-input
+        label="Start Mission Time (optional)"
+        [value]="startMissionTime"
+        (valueChange)="startMissionTime = $event"
+      />
     </div>
 
     <div class="form-group">
-      <label for="endTime">End Mission Time (Kerbin seconds, optional)</label>
-      <input id="endTime" type="number" [(ngModel)]="endMissionTime" name="endTime" min="0" step="1" />
+      <app-kerbin-time-input
+        label="End Mission Time (optional)"
+        [value]="endMissionTime"
+        (valueChange)="endMissionTime = $event"
+      />
     </div>
 
-    <div style="display: flex; gap: 12px; margin-top: 20px;">
+    <div class="form-actions">
       <button type="submit" class="btn btn-primary" [disabled]="saving">
         {{ saving ? 'Saving...' : (isEditMode ? 'Update Mission' : 'Create Mission') }}
       </button>

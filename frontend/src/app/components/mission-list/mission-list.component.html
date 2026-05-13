@@ -1,16 +1,16 @@
 <div class="list-container">
-  <div class="header">
+  <div class="list-header">
     <h2>Missions</h2>
     <a routerLink="/missions/new" class="btn btn-primary">+ New Mission</a>
   </div>
 
-  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="loading" class="loading-msg">Loading...</div>
 
-  <div *ngIf="!loading && missions.length === 0" class="empty">
+  <div *ngIf="!loading && missions.length === 0" class="empty-msg">
     <p>No missions yet. Create your first mission to get started!</p>
   </div>
 
-  <table *ngIf="!loading && missions.length > 0">
+  <table *ngIf="!loading && missions.length > 0" class="missions-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -20,11 +20,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let mission of missions">
+      <tr *ngFor="let mission of missions" class="readiness-row" [ngClass]="mission.readinessState">
         <td><a class="mission-link" [routerLink]="['/missions', mission.id]">{{ mission.name }}</a></td>
         <td>{{ mission.controlMode }}</td>
         <td>{{ mission.controlMode === 'Crewed' ? (mission.crewSummary || 'No crew') : (mission.probeCoreValue || 'N/A') }}</td>
-        <td><span class="readiness" [ngClass]="mission.readinessState">{{ formatReadiness(mission.readinessState) }}</span></td>
+        <td><span class="readiness-label" [ngClass]="mission.readinessState">{{ formatReadiness(mission.readinessState) }}</span></td>
       </tr>
     </tbody>
   </table>

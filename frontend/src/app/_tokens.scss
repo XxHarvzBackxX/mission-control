@@ -1,0 +1,78 @@
+// Mission Control — Design Token Set
+// All SASS variables used across the application.
+// Import with: @use '<path-to-app>/_tokens' as t;
+
+// ─── Colour Tokens ───────────────────────────────────────────────────────────
+
+// Backgrounds
+$color-bg-base:           #0f1117; // Page background (charcoal)
+$color-bg-surface:        #1a1d26; // Panel / card surface (slate grey)
+$color-bg-elevated:       #22263a; // Elevated / nested panel (gunmetal)
+
+// Borders
+$color-border:            #2e3352; // Standard panel border (muted metallic)
+$color-border-subtle:     #1e2235; // Subtle divider
+
+// Text
+$color-text-primary:      #e8eaf0; // Primary body text (off-white)
+$color-text-secondary:    #9aa0b8; // Labels, secondary info
+$color-text-muted:        #6b7280; // Placeholders, de-emphasised
+
+// Accents
+$color-accent-blue:       #4a9eff; // Informational (link, info state)
+$color-accent-amber:      #f59e0b; // Warning state
+$color-accent-red:        #f87171; // Critical / Not Ready state
+$color-accent-cyan:       #22d3ee; // Telemetry / highlight / Ready state
+
+// Readiness state colours
+$color-ready:             #22d3ee; // cyan  — Ready
+$color-at-risk:           #f59e0b; // amber — At Risk
+$color-not-ready:         #f87171; // red   — Not Ready
+
+// Interactive components
+$color-btn-primary-bg:    #1d4ed8;
+$color-btn-primary-text:  #ffffff;
+$color-btn-secondary-bg:  #22263a;
+$color-btn-secondary-text:#9aa0b8;
+$color-btn-danger-bg:     #991b1b;
+$color-btn-danger-text:   #ffffff;
+
+// Input fields
+$color-input-bg:          #1a1d26;
+$color-input-border:      #2e3352;
+$color-input-text:        #e8eaf0;
+$color-input-focus-border:#4a9eff;
+$color-input-placeholder: #6b7280;
+
+// ─── Spacing Tokens (4px base grid) ──────────────────────────────────────────
+
+$space-1:   4px;
+$space-2:   8px;
+$space-3:   12px;
+$space-4:   16px;
+$space-5:   20px;
+$space-6:   24px;
+$space-8:   32px;
+$space-10:  40px;
+
+// Layout
+$content-max-width: 900px;
+$header-height:     72px;
+
+// Borders
+$border-radius-sm:  3px;
+$border-radius-md:  6px;
+$border-width:      1px;
+$readiness-strip-width: 4px;
+
+// ─── Typography Tokens ────────────────────────────────────────────────────────
+
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-size-sm:     12px;
+$font-size-base:   14px;
+$font-size-lg:     16px;
+$font-size-xl:     20px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold:   600;
+$line-height-base:   1.5;

@@ -1,0 +1,124 @@
+@use '../../tokens' as t;
+
+.list-container {
+  // max-width/margin handled by .app-content in styles.scss
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: t.$space-5;
+
+  h2 {
+    font-size: t.$font-size-xl;
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text-primary;
+  }
+}
+
+// ─── Missions Table ───────────────────────────────────────────────────────────
+
+.missions-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: t.$border-width solid t.$color-border;
+  border-radius: t.$border-radius-md;
+  overflow: hidden;
+
+  th,
+  td {
+    padding: t.$space-3 t.$space-4;
+    text-align: left;
+    font-size: t.$font-size-base;
+  }
+
+  th {
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text-secondary;
+    background: t.$color-bg-elevated;
+    border-bottom: t.$border-width solid t.$color-border;
+    text-transform: uppercase;
+    font-size: t.$font-size-sm;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    color: t.$color-text-primary;
+    border-bottom: t.$border-width solid t.$color-border-subtle;
+  }
+
+  tbody tr {
+    transition: background 0.1s ease;
+
+    &:last-child td {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: t.$color-bg-elevated;
+    }
+  }
+}
+
+.mission-link {
+  color: t.$color-accent-blue;
+  font-weight: t.$font-weight-medium;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ─── Readiness Strip ─────────────────────────────────────────────────────────
+// Left-border colour strip — colour is never the sole indicator (text label present)
+
+.readiness-row {
+  &.Ready td:first-child {
+    border-left: t.$readiness-strip-width solid t.$color-ready;
+    padding-left: calc(t.$space-4 - t.$readiness-strip-width);
+  }
+
+  &.AtRisk td:first-child {
+    border-left: t.$readiness-strip-width solid t.$color-at-risk;
+    padding-left: calc(t.$space-4 - t.$readiness-strip-width);
+  }
+
+  &.NotReady td:first-child {
+    border-left: t.$readiness-strip-width solid t.$color-not-ready;
+    padding-left: calc(t.$space-4 - t.$readiness-strip-width);
+  }
+}
+
+.readiness-label {
+  font-weight: t.$font-weight-bold;
+  font-size: t.$font-size-sm;
+
+  &.Ready    { color: t.$color-ready; }
+  &.AtRisk   { color: t.$color-at-risk; }
+  &.NotReady { color: t.$color-not-ready; }
+}
+
+// ─── Empty / Loading States ───────────────────────────────────────────────────
+
+.loading-msg,
+.empty-msg {
+  padding: t.$space-10;
+  text-align: center;
+  color: t.$color-text-muted;
+  font-size: t.$font-size-base;
+}
+
+// ─── Responsive ──────────────────────────────────────────────────────────────
+
+@media (max-width: 480px) {
+  .missions-table {
+    font-size: t.$font-size-sm;
+
+    th,
+    td {
+      padding: t.$space-2 t.$space-3;
+    }
+  }
+}

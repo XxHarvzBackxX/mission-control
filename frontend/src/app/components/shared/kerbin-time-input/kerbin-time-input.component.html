@@ -1,0 +1,91 @@
+<fieldset class="kerbin-time-fieldset">
+  <legend class="kerbin-time-label">{{ label }}</legend>
+  <div class="kerbin-time-fields">
+
+    <div class="time-field">
+      <input
+        type="number"
+        [id]="'kt-years-' + label"
+        [name]="'kt-years-' + label"
+        [(ngModel)]="fields.years"
+        (change)="onFieldChange()"
+        min="0"
+        step="1"
+        placeholder="—"
+        class="time-input"
+        aria-label="Years"
+      />
+      <label [for]="'kt-years-' + label" class="time-sub-label">Y</label>
+    </div>
+
+    <div class="time-field">
+      <input
+        type="number"
+        [id]="'kt-days-' + label"
+        [name]="'kt-days-' + label"
+        [(ngModel)]="fields.days"
+        (change)="onFieldChange()"
+        min="0"
+        max="425"
+        step="1"
+        placeholder="—"
+        class="time-input"
+        aria-label="Days"
+      />
+      <label [for]="'kt-days-' + label" class="time-sub-label">D</label>
+    </div>
+
+    <div class="time-field">
+      <input
+        type="number"
+        [id]="'kt-hours-' + label"
+        [name]="'kt-hours-' + label"
+        [(ngModel)]="fields.hours"
+        (change)="onFieldChange()"
+        min="0"
+        max="5"
+        step="1"
+        placeholder="—"
+        class="time-input"
+        aria-label="Hours"
+      />
+      <label [for]="'kt-hours-' + label" class="time-sub-label">H</label>
+    </div>
+
+    <div class="time-field">
+      <input
+        type="number"
+        [id]="'kt-minutes-' + label"
+        [name]="'kt-minutes-' + label"
+        [(ngModel)]="fields.minutes"
+        (change)="onFieldChange()"
+        min="0"
+        max="59"
+        step="1"
+        placeholder="—"
+        class="time-input"
+        aria-label="Minutes"
+      />
+      <label [for]="'kt-minutes-' + label" class="time-sub-label">M</label>
+    </div>
+
+    <div class="time-field">
+      <input
+        type="number"
+        [id]="'kt-seconds-' + label"
+        [name]="'kt-seconds-' + label"
+        [(ngModel)]="fields.seconds"
+        (change)="onFieldChange()"
+        min="0"
+        max="59"
+        step="1"
+        placeholder="—"
+        class="time-input"
+        aria-label="Seconds"
+      />
+      <label [for]="'kt-seconds-' + label" class="time-sub-label">S</label>
+    </div>
+
+  </div>
+  <p class="kerbin-time-hint">Kerbin calendar: 1 year = 426 days, 1 day = 6 hours. Leave all blank = not set.</p>
+</fieldset>
