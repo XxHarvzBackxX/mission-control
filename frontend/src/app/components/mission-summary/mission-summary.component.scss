@@ -1,0 +1,151 @@
+@use '../../tokens' as t;
+
+.summary-container {
+  // max-width/margin handled by .app-content in styles.scss
+}
+
+.mission-title {
+  font-size: t.$font-size-xl;
+  font-weight: t.$font-weight-bold;
+  color: t.$color-text-primary;
+  margin-bottom: t.$space-4;
+}
+
+// ─── Readiness Badge ─────────────────────────────────────────────────────────
+
+.readiness-banner {
+  display: flex;
+  align-items: center;
+  gap: t.$space-3;
+  padding: t.$space-3 t.$space-4;
+  margin-bottom: t.$space-5;
+  border-radius: t.$border-radius-md;
+  border: t.$border-width solid t.$color-border;
+  background: t.$color-bg-surface;
+  border-left-width: t.$readiness-strip-width;
+
+  &.Ready    { border-left-color: t.$color-ready; }
+  &.AtRisk   { border-left-color: t.$color-at-risk; }
+  &.NotReady { border-left-color: t.$color-not-ready; }
+}
+
+.readiness-badge {
+  font-size: t.$font-size-base;
+  font-weight: t.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.Ready    { color: t.$color-ready; }
+  &.AtRisk   { color: t.$color-at-risk; }
+  &.NotReady { color: t.$color-not-ready; }
+}
+
+// ─── Detail Rows ─────────────────────────────────────────────────────────────
+
+.detail-section {
+  border: t.$border-width solid t.$color-border;
+  border-radius: t.$border-radius-md;
+  overflow: hidden;
+  margin-bottom: t.$space-4;
+}
+
+.detail-row {
+  display: flex;
+  padding: t.$space-3 t.$space-4;
+  border-bottom: t.$border-width solid t.$color-border-subtle;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detail-label {
+  font-size: t.$font-size-sm;
+  font-weight: t.$font-weight-bold;
+  color: t.$color-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  flex: 1;
+  font-size: t.$font-size-base;
+  color: t.$color-text-primary;
+  font-variant-numeric: tabular-nums;
+}
+
+.crew-none {
+  color: t.$color-accent-red;
+}
+
+// ─── Warnings ────────────────────────────────────────────────────────────────
+
+.warnings-section {
+  margin-bottom: t.$space-4;
+
+  h3 {
+    font-size: t.$font-size-base;
+    font-weight: t.$font-weight-bold;
+    color: t.$color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: t.$space-3;
+  }
+}
+
+.warnings-list {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-2;
+}
+
+// ─── Actions ─────────────────────────────────────────────────────────────────
+
+.actions {
+  display: flex;
+  gap: t.$space-3;
+  flex-wrap: wrap;
+  margin-top: t.$space-5;
+}
+
+// ─── Not Found ───────────────────────────────────────────────────────────────
+
+.not-found {
+  text-align: center;
+  padding: t.$space-10;
+  color: t.$color-text-muted;
+
+  h2 {
+    font-size: t.$font-size-xl;
+    color: t.$color-text-secondary;
+    margin-bottom: t.$space-3;
+  }
+
+  p {
+    margin-bottom: t.$space-4;
+  }
+}
+
+// ─── Responsive ──────────────────────────────────────────────────────────────
+
+@media (max-width: 480px) {
+  .detail-row {
+    flex-direction: column;
+    gap: t.$space-1;
+  }
+
+  .detail-label {
+    width: auto;
+  }
+
+  .actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

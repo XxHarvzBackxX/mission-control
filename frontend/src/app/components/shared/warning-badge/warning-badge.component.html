@@ -1,3 +1,4 @@
-<span class="warning-badge" [class.blocking]="warning.isBlocking" [class.advisory]="!warning.isBlocking">
-  {{ warning.message }}
-</span>
+<div class="warning-badge" [class.blocking]="warning.isBlocking" [class.advisory]="!warning.isBlocking">
+  <span class="warning-type">{{ warning.isBlocking ? 'Blocking' : 'Advisory' }}</span>
+  <span class="warning-text">{{ warning.message }}</span>
+</div>

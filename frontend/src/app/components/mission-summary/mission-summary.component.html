@@ -10,12 +10,13 @@
   <div *ngIf="mission">
     <h2>{{ mission.name }}</h2>
 
-    <div style="margin-bottom: 16px;">
+    <div class="readiness-banner" [ngClass]="mission.readinessState">
       <span class="readiness-badge" [ngClass]="mission.readinessState">
         {{ mission.readinessState === 'AtRisk' ? 'At Risk' : mission.readinessState === 'NotReady' ? 'Not Ready' : 'Ready' }}
       </span>
     </div>
 
+    <div class="detail-section">
     <div class="detail-row">
       <span class="detail-label">Target Body</span>
       <span class="detail-value">{{ mission.targetBodyValue }}{{ mission.targetBodyIsCustom ? ' (custom)' : '' }}</span>
@@ -45,7 +46,7 @@
     <div class="detail-row" *ngIf="mission.controlMode === 'Crewed'">
       <span class="detail-label">Crew Members</span>
       <span class="detail-value">
-        <span *ngIf="mission.crewMembers.length === 0" style="color: #991b1b;">None assigned</span>
+        <span *ngIf="mission.crewMembers.length === 0" class="crew-none">None assigned</span>
         <span *ngFor="let member of mission.crewMembers; let last = last">{{ member }}{{ !last ? ', ' : '' }}</span>
       </span>
     </div>
@@ -65,11 +66,14 @@
       <span class="detail-label">End Mission Time</span>
       <span class="detail-value">{{ mission.endMissionTime | kerbinTime }}</span>
     </div>
+    </div>
 
     <!-- Warnings -->
-    <div class="warnings-list" *ngIf="mission.warnings.length > 0">
+    <div class="warnings-section" *ngIf="mission.warnings.length > 0">
       <h3>Warnings</h3>
+      <div class="warnings-list">
       <app-warning-badge *ngFor="let warning of mission.warnings" [warning]="warning"></app-warning-badge>
+      </div>
     </div>
 
     <div class="actions">
